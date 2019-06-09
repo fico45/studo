@@ -1,5 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:studo/screens/dashboard.dart';
+import 'package:studo/view/dashboard.dart';
+import 'package:studo/view/examView.dart';
+import 'package:studo/view/teacherView.dart';
+import 'package:studo/view/classView.dart';
+import 'package:studo/view/settingsView.dart';
 
 void main() => runApp(MyApp());
 
@@ -8,11 +12,11 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'studo',
+      title: 'StuDo',
       theme: new ThemeData(
-        primarySwatch: Colors.amber,
+        primaryColor: Colors.white,
       ),
-      home: MyHomePage(title: 'studo'),
+      home: MyHomePage(title: 'StuDo'),
     );
   }
 }
@@ -31,8 +35,52 @@ class _MyHomePageState extends State<MyHomePage> {
       appBar: new AppBar(
         title: new Text(widget.title),
       ),
-      //body: Calendar(),
+      body: Dashboard(),
+      drawer: Drawer(
+        child: ListView(
+          padding: const EdgeInsets.only(top: 0.0),
+          children: <Widget>[
+            UserAccountsDrawerHeader(
+              accountName: Text('Filip Novosel'),
+              accountEmail: Text('fnovosel@unipu.hr'),
+              currentAccountPicture: CircleAvatar(
+                backgroundColor:
+                    Theme.of(context).platform == TargetPlatform.android
+                        ? Colors.white
+                        : Colors.blue,
+                child: Text(
+                  '45',
+                  style: TextStyle(fontSize: 40.0),
+                ),
+              ),
+            ),
+            ListTile(
+              title: Text('Exams'),
+              trailing: Icon(Icons.assignment),
+              onTap: () => Navigator.of(context).push(new MaterialPageRoute(
+                  builder: (BuildContext context) => ExamView())),
+            ),
+            ListTile(
+              title: Text('Teachers'),
+              trailing: Icon(Icons.people),
+              onTap: () => Navigator.of(context).push(new MaterialPageRoute(
+                  builder: (BuildContext context) => TeachersView())),
+            ),
+            ListTile(
+              title: Text('Classes'),
+              trailing: Icon(Icons.event),
+              onTap: () => Navigator.of(context).push(new MaterialPageRoute(
+                  builder: (BuildContext context) => ClassView())),
+            ),
+            ListTile(
+              title: Text('Settings'),
+              trailing: Icon(Icons.event),
+              onTap: () => Navigator.of(context).push(new MaterialPageRoute(
+                  builder: (BuildContext context) => SettingsView())),
+            )
+          ],
+        ),
+      ),
     );
   }
-  
 }
