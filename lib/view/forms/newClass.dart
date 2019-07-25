@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
 
-class NewExam extends StatefulWidget {
+class NewClass extends StatefulWidget {
   @override
   State<StatefulWidget> createState() {
     // TODO: implement createState
-    return NewExamState();
+    return NewClassState();
   }
 }
 
-class NewExamState extends State{
+class NewClassState extends State{
   @override
   Widget build(BuildContext context) {
     

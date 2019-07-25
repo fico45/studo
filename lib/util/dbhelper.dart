@@ -37,6 +37,7 @@ class DbHelper {
   }
 
   void _createDb(Database db, int newVersion) async {
+
     await db.execute(
         "CREATE TABLE Year(id INTEGER PRIMARY KEY, startDate DATETIME, endDate DATETIME)");
     await db.execute(
@@ -45,7 +46,7 @@ class DbHelper {
         "CREATE TABLE Subject (id INTEGER PRIMARY KEY, name TEXT, color TEXT, academicYearID INTEGER)");
     await db.execute("CREATE TABLE Teacher(id INTEGER PRIMARY KEY, name TEXT)");
     await db.execute(
-        "CREATE TABLE Class (id INTEGER PRIMARY KEY, subjectID INTEGER REFERENCES Subject(id), type TEXT, room TEXT, startTime TEXT, endTime TEXT, teacherID INTEGER REFERENCES Teacher(id)");
+        "CREATE TABLE Class (id INTEGER PRIMARY KEY, subjectID INTEGER REFERENCES Subject(id), type TEXT, room TEXT, startTime TEXT, endTime TEXT, teacherID INTEGER REFERENCES Teacher(id))");
     await db.execute(
         "CREATE TABLE Exam(SubjectID INTEGER PRIMARY KEY REFERENCES Subject(id), examTime DATETIME, location TEXT, duration INTEGER, description TEXT)");
     await db.execute(
@@ -176,6 +177,7 @@ class DbHelper {
   }
 
   Future<int> updateSubject(Subject subject) async {
+    
     Database db = await this.db;
     var result = await db.update('Subject', subject.toMap(),
         where: "id = ?", whereArgs: [subject.id]);

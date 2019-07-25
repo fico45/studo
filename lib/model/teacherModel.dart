@@ -2,12 +2,14 @@ class Teacher {
   int _id;
   String _name;
 
-  Teacher(this._name);
+  Teacher();
+  
+  
 
   int get id => _id;
   String get name => _name;
 
-  set type(String newName) {
+  set name(String newName) {
     _name = newName;
   }
 
