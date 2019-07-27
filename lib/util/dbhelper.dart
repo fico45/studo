@@ -201,7 +201,7 @@ class DbHelper {
   Future<List> getTeacher(Teacher teacher) async {
     Database db = await this.db;
     var result = await db.rawQuery("SELECT * FROM Teacher");
-    return result;
+    return result.toList();
   }
 
   Future<int> updateTeacher(Teacher teacher) async {

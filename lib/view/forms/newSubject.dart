@@ -123,6 +123,7 @@ class NewSubjectState extends State {
   void save() {
     
       helper.insertSubject(subject);
+      dispose();
     
     Navigator.pop(context, true);
   }

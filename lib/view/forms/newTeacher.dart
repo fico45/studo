@@ -70,7 +70,7 @@ class NewTeacherState extends State {
     Teacher teacher = new Teacher();
     teacher.name=val;
     helper.insertTeacher(teacher);
-
+    dispose();
     Navigator.pop(context, true);
   }
 }
