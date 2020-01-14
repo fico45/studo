@@ -1,16 +1,19 @@
 # studo
 
-A new Flutter project.
+A new Flutter project, made as an college assignment.
 
-## Getting Started
+## Description
 
-This project is a starting point for a Flutter application.
+This project is intended for educational purpose.
+The base concept is sort of a "personal assistant" for students. User should be able to add classes and subjects they attend at college, and the app should display upcoming classes at a glance.
+Each subject can have an exam attached with a reminder of choice, with a description. Think of it like a "Post-it" note, reminding yourself not to forget a calculator for your math exam. That turns out to be quite important!
 
-A few resources to get you started if this is your first Flutter project:
+After setting everything up, the "Dashboard" should be the most visited page of the app, displaying upcoming classes, homeworks, exams, etc. Design for dashboard is still pending, as I'm trying to find a way to make it as simple as possible, whilst avoiding the "Google calendar" feel. We're students, not managers. :D
 
-- [Lab: Write your first Flutter app](https://flutter.dev/docs/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://flutter.dev/docs/cookbook)
+For this purpose, it will be compiled and designed specifically for Android using Material design.
 
-For help getting started with Flutter, view our
-[online documentation](https://flutter.dev/docs), which offers tutorials,
+The overall design is bound to change, and no module is final at this point.
+
+For help getting started with Flutter, view our 
+[online documentation](https://flutter.io/docs), which offers tutorials, 
 samples, guidance on mobile development, and a full API reference.
