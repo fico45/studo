@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
+//import 'package:flutter_colorpicker/block_picker.dart';
 import 'package:studo/model/subjectModel.dart';
 import 'package:studo/util/dbhelper.dart';
 
-DbHelper helper = DbHelper();
-
-class NewSubject extends StatefulWidget {
+/* class NewSubject extends StatefulWidget {
   Subject subject;
 
   @override
@@ -61,7 +60,44 @@ class NewSubjectState extends State {
                     leading: const Icon(Icons.color_lens),
 
                     //color picker from here
-                    
+                    title: new RaisedButton(
+                        elevation: 3.0,
+                        onPressed: () {
+                          showGeneralDialog(
+                              barrierColor: Colors.black.withOpacity(0.5),
+                              transitionBuilder: (context, a1, a2, widget) {
+                                return Transform.scale(
+                                  scale: a1.value,
+                                  child: Opacity(
+                                      opacity: a1.value,
+                                      child: AlertDialog(
+                                        title: const Text('Pick a color!'),
+                                        content: SingleChildScrollView(
+                                          child: BlockPicker(
+                                            pickerColor: currentColor,
+                                            onColorChanged: changeMaterialColor,
+                                          ),
+                                        ),
+                                        actions: <Widget>[
+                                          FlatButton(
+                                            child: const Text('Close'),
+                                            onPressed: () {
+                                              setState(() =>
+                                                  currentColor = pickerColor);
+                                              Navigator.of(context).pop();
+                                            },
+                                          ),
+                                        ],
+                                      )),
+                                );
+                              },
+                              transitionDuration: Duration(milliseconds: 400),
+                              barrierDismissible: true,
+                              barrierLabel: '',
+                              context: context,
+                              pageBuilder:
+                                  (context, animation1, animation2) {});
+                        })
                     //all the way to here (color picker)
                     ),
                 new TextFormField(
@@ -83,10 +119,10 @@ class NewSubjectState extends State {
   }
 
   void save() {
-    
-      helper.insertSubject(subject);
-      dispose();
-    
+    helper.insertSubject(subject);
+    dispose();
+
     Navigator.pop(context, true);
   }
 }
+ */

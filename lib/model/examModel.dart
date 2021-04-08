@@ -1,42 +1,69 @@
-class Exam {
-  int _id;
-  int _subjectID;
-  DateTime _examTime;
-  String _location;
-  int _duration;
-  String _description;
+import 'package:flutter/material.dart';
 
-  Exam(this._examTime, this._duration, [this._location, this._description]);
+class Exam with ChangeNotifier {
+  final String id;
+  final String subjectID;
+  final String examTimeDate;
 
-  int get id => _id;
-  DateTime get examTime => _examTime;
-  String get location => _location;
-  int get duration => _duration;
-  String get description => _description;
-  int get subjectID => _subjectID;
+  final String location;
+  final String description;
 
-  set examTime(DateTime newExamTime) => _examTime = newExamTime;
-  set location(String newLocation) => _location = newLocation;
-  set duration(int newDuration) => _duration = newDuration;
-  set description(String newDescription) => _description = newDescription;
-  set subjectID(int newSubjectID) => _subjectID = newSubjectID;
+  Exam(
+      {@required this.id,
+      @required this.subjectID,
+      @required this.examTimeDate,
+      @required this.location,
+      @required this.description});
+}
 
-  Exam.map(dynamic o) {
-    this._subjectID = o["subjectID"];
-    this._examTime = o["examTime"];
-    this._location = o["location"];
-    this._duration = o["duration"];
-    this._description = o["description"];
+class Exams with ChangeNotifier {
+  List<Exam> _items = [
+    Exam(
+        id: '0',
+        subjectID: '1',
+        examTimeDate: '2021-04-02 14:45',
+        location: '403',
+        description: 'Ponesi kalkulator'),
+    Exam(
+        id: '1',
+        subjectID: '0',
+        examTimeDate: '2021-04-15 16:45',
+        location: '402',
+        description: 'Ne zaboravi olovku!'),
+  ];
+
+  List<Exam> get items {
+    return [..._items];
   }
 
-  Map<String, dynamic> toMap() {
-    var map = new Map<String, dynamic>();
-    map["subjectID"] = _subjectID;
-    map["examTime"] = _examTime;
-    map["location"] = _location;
-    map["duration"] = _duration;
-    map["description"] = _description;
+  void deleteExam(String id) {
+    _items.removeWhere((exam) => exam.id == id);
+    notifyListeners();
   }
 
-  
+  Future<void> addExam(Exam exam) async {
+    final newExam = Exam(
+      id: DateTime.now().toString(),
+      subjectID: exam.subjectID,
+      examTimeDate: exam.examTimeDate,
+      location: exam.location,
+      description: exam.description,
+    );
+    _items.add(newExam);
+    notifyListeners();
+  }
+
+  Exam findById(String id) {
+    return items.firstWhere((exam) => exam.id == id);
+  }
+
+  void updateExam(String id, Exam newExam) {
+    final examIndex = _items.indexWhere((exm) => exm.id == id);
+    if (examIndex >= 0) {
+      _items[examIndex] = newExam;
+      notifyListeners();
+    } else {
+      print('...');
+    }
+  }
 }

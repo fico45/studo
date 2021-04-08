@@ -1,43 +1,67 @@
-class Subject {
-  int _id;
-  String _name;
-  String _color;
-  String _year;
+import 'package:flutter/material.dart';
 
-  Subject(this._name, this._year, [this._color]);
+class Subject with ChangeNotifier {
+  String id;
+  String name;
+  String color;
+  String year;
 
-  int get id => _id;
-  String get name => _name;
-  String get color => _color;
-  String get year => _year;
+  Subject({
+    @required this.id,
+    @required this.name,
+    @required this.color,
+    @required this.year,
+  });
+}
 
-  set name(String newName) {
-    if (newName.length <= 255) {
-      _name = newName;
+class Subjects with ChangeNotifier {
+  List<Subject> _items = [
+    Subject(
+      id: '0',
+      name: 'Matematika',
+      color: '0000FF',
+      year: '2021',
+    ),
+    Subject(
+      id: '1',
+      name: 'Računovodstvo',
+      color: 'FF0000',
+      year: '2021',
+    ),
+  ];
+
+  List<Subject> get items {
+    return [..._items];
+  }
+
+  void deleteSubject(String id) {
+    _items.removeWhere((subject) => subject.id == id);
+    notifyListeners();
+  }
+
+  Future<void> addSubject(Subject subject) async {
+    final newSubject = Subject(
+      id: DateTime.now().toString(),
+      name: subject.name,
+      color: subject.color,
+      year: subject.year,
+    );
+    _items.add(newSubject);
+    print(newSubject.id);
+    notifyListeners();
+  }
+
+  Subject findById(String id) {
+    return items.firstWhere((subject) => subject.id == id);
+  }
+
+  void updateSubject(String id, Subject newSubject) {
+    final subjectIndex = _items.indexWhere((subject) => subject.id == id);
+    if (subjectIndex >= 0) {
+      _items[subjectIndex] = newSubject;
+      notifyListeners();
+    } else {
+      print('...');
     }
-  }
-
-  set color(String newColor) {
-    if (newColor.length <= 6) {
-      _color = newColor;
-    }
-  }
-
-  set year(String newYear) {
-    _year = newYear;
-  }
-
-  Subject.map(dynamic o) {
-    this._name = o["name"];
-    this._color = o["color"];
-    this._year = o["year"];
-  }
-
-  Map<String, dynamic> toMap() {
-    var map = new Map<String, dynamic>();
-    map["name"] = _name;
-    map["color"] = _color;
-    map["year"] = _year;
-    return map;
   }
 }

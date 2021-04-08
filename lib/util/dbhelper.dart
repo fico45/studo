@@ -1,4 +1,4 @@
-import 'package:sqflite/sqflite.dart';
+/* import 'package:sqflite/sqflite.dart';
 import 'dart:core';
 import 'dart:async';
 import 'dart:io';
@@ -29,7 +29,7 @@ class DbHelper {
   }
 
   Future<Database> initializeDb() async {
-    Directory dir = await getExternalStorageDirectory();
+    Directory dir = await getApplicationDocumentsDirectory();
     String path = dir.path + "studo.db";
 
     var dbStudo = await openDatabase(path, version: 1, onCreate: _createDb);
@@ -37,7 +37,6 @@ class DbHelper {
   }
 
   void _createDb(Database db, int newVersion) async {
-
     await db.execute(
         "CREATE TABLE Year(id INTEGER PRIMARY KEY, startDate DATETIME, endDate DATETIME)");
     await db.execute(
@@ -177,7 +176,6 @@ class DbHelper {
   }
 
   Future<int> updateSubject(Subject subject) async {
-    
     Database db = await this.db;
     var result = await db.update('Subject', subject.toMap(),
         where: "id = ?", whereArgs: [subject.id]);
@@ -192,11 +190,11 @@ class DbHelper {
 
 //Teacher CRUD
 
-  Future<int> insertTeacher(Teacher teacher) async {
+  /* Future<int> insertTeacher(Teacher teacher) async {
     Database db = await this.db;
     var result = await db.insert('Teacher', teacher.toMap());
     return result;
-  }
+  } */
 
   Future<List> getTeacher(Teacher teacher) async {
     Database db = await this.db;
@@ -204,12 +202,12 @@ class DbHelper {
     return result.toList();
   }
 
-  Future<int> updateTeacher(Teacher teacher) async {
+  /* Future<int> updateTeacher(Teacher teacher) async {
     Database db = await this.db;
     var result = await db.update('Teacher', teacher.toMap(),
         where: "id = ?", whereArgs: [teacher.id]);
     return result;
-  }
+  } */
 
   Future<int> deleteTeacher(int id) async {
     Database db = await this.db;
@@ -245,3 +243,4 @@ class DbHelper {
     return result;
   }
 }
+ */

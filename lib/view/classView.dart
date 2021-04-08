@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:studo/view/forms/newSubject.dart';
+import 'package:studo/widgets/newSubject.dart';
 
 class ClassView extends StatelessWidget {
   @override
@@ -38,13 +38,6 @@ class ClassView extends StatelessWidget {
                 ],
               )),
         ],
-      ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          Navigator.of(context).push(new MaterialPageRoute(
-              builder: (BuildContext context) => NewSubject()));
-        },
-        child: Icon(Icons.add),
       ),
     );
   }

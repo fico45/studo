@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:studo/util/dbhelper.dart';
+//import 'package:studo/util/dbhelper.dart';
 
 class Dashboard extends StatefulWidget {
   @override
@@ -9,25 +9,31 @@ class Dashboard extends StatefulWidget {
 }
 
 class DashboardState extends State {
-  DbHelper helper = DbHelper();
+  // DbHelper helper = DbHelper();
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: Text('This is where the Dasbhoard should be.'),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          final snackBar = SnackBar(
-            content: Text('FAB pressed!'),
-            action: SnackBarAction(
-              label: 'Undo',
-              onPressed: () {},
-            ),
-          );
-          Scaffold.of(context).showSnackBar(snackBar);
-        },
-        child: Icon(Icons.adb),
-      ),
+    Size size = MediaQuery.of(context).size;
+    return Column(
+      children: <Widget>[
+        Container(
+          height: size.height * 0.2,
+          child: Stack(
+            children: <Widget>[
+              Container(
+                height: size.height * 0.2 - 27,
+                decoration: BoxDecoration(
+                  color: Colors.orange,
+                  borderRadius: BorderRadius.only(
+                    bottomLeft: Radius.circular(36),
+                    bottomRight: Radius.circular(36),
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ),
+      ],
     );
   }
 }
