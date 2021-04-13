@@ -28,6 +28,12 @@ class Subjects with ChangeNotifier {
       color: 'FF0000',
       year: '2021',
     ),
+    Subject(
+      id: '2',
+      name: 'PIS',
+      color: '00FF00',
+      year: '2021',
+    ),
   ];
 
   List<Subject> get items {

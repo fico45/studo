@@ -14,6 +14,8 @@ class NewExam extends StatefulWidget {
 class _NewExamState extends State<NewExam> {
   final _form = GlobalKey<FormState>();
 
+  String dropdownValue = '';
+
   var _editedExam = Exam(
     id: null,
     subjectID: '',
@@ -87,7 +89,7 @@ class _NewExamState extends State<NewExam> {
             title: Text('An error occured'),
             content: Text('Something went wrong.'),
             actions: <Widget>[
-              FlatButton(
+              TextButton(
                 child: Text('Okay'),
                 onPressed: () {
                   Navigator.of(ctx).pop();
@@ -106,7 +108,10 @@ class _NewExamState extends State<NewExam> {
   }
 
   Widget build(BuildContext context) {
-    final subjectData = Provider.of<Subjects>(context);
+    final subjectData = Provider.of<Subjects>(
+      context,
+      listen: false,
+    );
     return Scaffold(
       appBar: AppBar(
         title: Text('Edit Exam'),
@@ -169,14 +174,37 @@ class _NewExamState extends State<NewExam> {
                           _editedExam = Exam(
                             id: _editedExam.id,
                             subjectID: _editedExam.subjectID,
-                            examTimeDate: _editedExam.examTimeDate,
+                            examTimeDate: val,
                             location: _editedExam.location,
                             description: _editedExam.description,
                           );
                         },
                       ),
                     ),
-                    DropdownButtonFormField(),
+                    DropdownButtonFormField(
+                      hint: const Text("Not selected"),
+                      value: subjectData.items[0].id,
+                      onChanged: (final String newValue) {
+                        dropdownValue = newValue;
+                      },
+                      items: subjectData.items
+                          .map(
+                            (item) => DropdownMenuItem(
+                              child: Text(item.name),
+                              value: item.id,
+                            ),
+                          )
+                          .toList(),
+                      onSaved: (val) {
+                        _editedExam = Exam(
+                          id: _editedExam.id,
+                          subjectID: dropdownValue,
+                          examTimeDate: _editedExam.examTimeDate,
+                          location: _editedExam.location,
+                          description: _editedExam.description,
+                        );
+                      },
+                    ),
                   ],
                 ),
               ),

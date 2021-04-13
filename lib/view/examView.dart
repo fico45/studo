@@ -35,8 +35,6 @@ class ExamView extends StatelessWidget {
             itemBuilder: (_, i) => Column(
                   children: [
                     ExamItem(
-                      //TODO: populate with both examData and subjectData;
-                      //where examData.items.subjectID == subjectData.items.id
                       examData.items[i].id,
                       subjectData.findById(examData.items[i].subjectID).name,
                     ),

@@ -4,7 +4,6 @@ class Exam with ChangeNotifier {
   final String id;
   final String subjectID;
   final String examTimeDate;
-
   final String location;
   final String description;
 

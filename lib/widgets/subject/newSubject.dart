@@ -88,7 +88,7 @@ class _NewSubjectState extends State<NewSubject> {
             title: Text('An error occured'),
             content: Text('Something went wrong.'),
             actions: <Widget>[
-              FlatButton(
+              TextButton(
                 child: Text('Okay'),
                 onPressed: () {
                   Navigator.of(ctx).pop();
