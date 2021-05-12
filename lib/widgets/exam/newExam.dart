@@ -182,8 +182,7 @@ class _NewExamState extends State<NewExam> {
                       ),
                     ),
                     DropdownButtonFormField(
-                      hint: const Text("Not selected"),
-                      value: subjectData.items[0].id,
+                      hint: const Text("Select subject"),
                       onChanged: (final String newValue) {
                         dropdownValue = newValue;
                       },

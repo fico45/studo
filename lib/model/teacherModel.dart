@@ -8,6 +8,11 @@ class Teacher with ChangeNotifier {
     @required this.id,
     @required this.name,
   });
+
+  Map<String, dynamic> toMap() {
+    var map = new Map<String, dynamic>();
+    map["name"] = name;
+  }
 }
 
 class Teachers with ChangeNotifier {

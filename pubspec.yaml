@@ -26,6 +26,8 @@ dependencies:
   cupertino_icons: ^0.1.2
   flutter_colorpicker: any
   date_time_picker: any
+  weekday_selector: ^1.0.0
+  flutter_slidable: ^0.5.7
   
 dev_dependencies:
   flutter_test:

@@ -22,8 +22,6 @@ class SubjectItem extends StatelessWidget {
     if (hexColor.length == 8) {
       return Color(int.parse("0x$hexColor"));
     }
-
-    print(avatarColor);
   }
 
   @override

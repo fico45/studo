@@ -1,12 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:studo/model/classModel.dart';
 
-import 'package:studo/view/dashboard.dart';
+import 'package:studo/widgets/dashboard/dashboard.dart';
 import 'package:studo/view/examView.dart';
 import 'package:studo/view/teacherView.dart';
 import 'package:studo/view/classView.dart';
 import 'package:studo/view/settingsView.dart';
 import 'package:studo/widgets/app_drawer.dart';
+import 'package:studo/widgets/class/newClass.dart';
 import 'package:studo/widgets/teacher/newTeacher.dart';
 import './model/teacherModel.dart';
 import './widgets/subject/newSubject.dart';
@@ -31,12 +33,13 @@ class MyApp extends StatelessWidget {
         ),
         ChangeNotifierProvider(
           create: (ctx) => Exams(),
-        )
+        ),
+        ChangeNotifierProvider(create: (ctx) => Classes())
       ],
       child: MaterialApp(
         title: 'StuDo',
         theme: ThemeData(
-          primaryColor: Colors.orange,
+          primaryColor: Colors.white,
         ),
         home: MyHomePage(title: 'StuDo'),
         routes: {
@@ -46,6 +49,8 @@ class MyApp extends StatelessWidget {
           SubjectView.routeName: (context) => SubjectView(),
           ExamView.routeName: (context) => ExamView(),
           NewExam.routeName: (context) => NewExam(),
+          NewClass.routeName: (context) => NewClass(),
+          ClassView.routeName: (context) => ClassView(),
         },
       ),
     );

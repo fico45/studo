@@ -1,76 +1,86 @@
-import 'package:studo/model/daysOfWeekModel.dart';
+import 'package:flutter/material.dart';
 
-class Class {
-  int _id;
-  int _subjectID;
-  String _type;
-  String _room;
-  int _teacherID;
-  DaysOfWeek _daysOfWeek;
-  String _startTime;
-  String _endTime;
+class Class with ChangeNotifier {
+  final String id;
+  final String subjectID;
+  final String type;
+  final String room;
+  final String teacherID;
+  final String daysOfWeek;
+  final String startTime;
+  final String endTime;
 
-  Class(this._type, this._room, this._startTime, this._endTime,
-      [this._teacherID, this._daysOfWeek]);
+  Class({
+    @required this.id,
+    @required this.subjectID,
+    @required this.type,
+    @required this.room,
+    @required this.teacherID,
+    @required this.daysOfWeek,
+    @required this.startTime,
+    @required this.endTime,
+  });
+}
 
-  int get id => _id;
-  int get subjectID => _subjectID;
-  String get type => _type;
-  String get room => _room;
-  int get teacherID => _teacherID;
-  DaysOfWeek get daysOfWeek => _daysOfWeek;
-  String get startTime => _startTime;
-  String get endTime => _endTime;
+class Classes with ChangeNotifier {
+  List<Class> _items = [
+    Class(
+      id: '0',
+      subjectID: '1',
+      type: 'Labs',
+      room: '203',
+      teacherID: '1',
+      daysOfWeek: '',
+      startTime: '14:45',
+      endTime: '15:30',
+    ),
+    Class(
+      id: '1',
+      subjectID: '2',
+      type: 'Predavanja',
+      room: '203',
+      teacherID: '1',
+      daysOfWeek: '',
+      startTime: '15:45',
+      endTime: '16:30',
+    ),
+  ];
 
-  set type(String newType) {
-    _type = newType;
+  List<Class> get items {
+    return [..._items];
   }
 
-  set room(String newRoom) {
-    _room = newRoom;
+  void deleteClass(String id) {
+    _items.removeWhere((cl) => cl.id == id);
+    notifyListeners();
   }
 
-  set teacherID(int newTeacherID) {
-    _teacherID = newTeacherID;
+  Future<void> addClass(Class cl) async {
+    final newClass = Class(
+      id: DateTime.now().toString(),
+      subjectID: cl.subjectID,
+      type: cl.type,
+      room: cl.room,
+      teacherID: cl.teacherID,
+      daysOfWeek: cl.daysOfWeek,
+      startTime: cl.startTime,
+      endTime: cl.endTime,
+    );
+    _items.add(newClass);
+    notifyListeners();
   }
 
-  set startTime(String newStartTime) {
-    if (newStartTime != _startTime) {
-      _startTime = newStartTime;
+  Class findById(String id) {
+    return items.firstWhere((element) => element.id == id);
+  }
+
+  void updateClass(String id, Class newClass) {
+    final classIndex = _items.indexWhere((element) => element.id == id);
+    if (classIndex >= 0) {
+      _items[classIndex] = newClass;
+      notifyListeners();
+    } else {
+      print('...');
     }
-  }
-
-  set endTime(String newEndTime) {
-    if (newEndTime != _endTime) {
-      _endTime = newEndTime;
-    }
-  }
-
-  set daysOfWeek(DaysOfWeek newDaysOfWeek) {
-    if (newDaysOfWeek != _daysOfWeek) {
-      _daysOfWeek = newDaysOfWeek;
-    }
-  }
-
-  Class.map(dynamic o) {
-    this._type = o["type"];
-    this._subjectID = o["subjectID"];
-    this._teacherID = o["teacherID"];
-    this._room = o["room"];
-    this._daysOfWeek = o["daysOfWeek"];
-    this._startTime = o["startTIme"];
-    this._endTime = o["endTime"];
-  }
-  
-  Map<String, dynamic> toMap() {
-    var map = new Map<String, dynamic>();
-
-    map["type"] = _type;
-    map["subjectID"] = _subjectID;
-    map["teacherID"] = _teacherID;
-    map["room"] = _room;
-    map["startTime"] = _startTime;
-    map["endTime"] = _endTime;
-    return map;
   }
 }

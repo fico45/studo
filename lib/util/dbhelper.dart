@@ -1,11 +1,10 @@
-/* import 'package:sqflite/sqflite.dart';
+/*import 'package:sqflite/sqflite.dart';
 import 'dart:core';
 import 'dart:async';
 import 'dart:io';
 import 'package:path_provider/path_provider.dart';
 import 'package:studo/model/examModel.dart';
-import 'package:studo/model/yearModel.dart';
-import 'package:studo/model/holidayModel.dart';
+
 import 'package:studo/model/classModel.dart';
 import 'package:studo/model/subjectModel.dart';
 import 'package:studo/model/daysOfWeekModel.dart';
@@ -80,60 +79,6 @@ class DbHelper {
     return result;
   }
 
-//Year CRUD
-
-  Future<int> insertYear(Year year) async {
-    Database db = await this.db;
-    var result = await db.insert('Year', year.toMap());
-    return result;
-  }
-
-  Future<List> getYears() async {
-    Database db = await this.db;
-    var result = await db.rawQuery("SELECT * FROM Year");
-    return result;
-  }
-
-  Future<int> updateYear(Year year) async {
-    Database db = await this.db;
-    var result = await db
-        .update('Year', year.toMap(), where: "id = ?", whereArgs: [year.id]);
-    return result;
-  }
-
-  Future<int> deleteYear(int id) async {
-    Database db = await this.db;
-    var result = await db.delete('Year', where: "id = ?", whereArgs: [id]);
-    return result;
-  }
-
-  //Holiday CRUD
-
-  Future<int> insertHoliday(Holiday holiday) async {
-    Database db = await this.db;
-    var result = await db.insert('Holiday', holiday.toMap());
-    return result;
-  }
-
-  Future<List> getHoliday(Holiday holiday) async {
-    Database db = await this.db;
-    var result = await db.rawQuery("SELECT * FROM Holiday");
-    return result;
-  }
-
-  Future<int> updateHoliday(Holiday holiday) async {
-    Database db = await this.db;
-    var result = await db.update('Holiday', holiday.toMap(),
-        where: "id = ?", whereArgs: [holiday.id]);
-    return result;
-  }
-
-  Future<int> deleteHoliday(int id) async {
-    Database db = await this.db;
-    var result = await db.delete('Holiday', where: "id = ?", whereArgs: [id]);
-    return result;
-  }
-
 //Class CRUD
 
   Future<int> insertClass(Class cl) async {
@@ -190,11 +135,11 @@ class DbHelper {
 
 //Teacher CRUD
 
-  /* Future<int> insertTeacher(Teacher teacher) async {
+  Future<int> insertTeacher(Teacher teacher) async {
     Database db = await this.db;
     var result = await db.insert('Teacher', teacher.toMap());
     return result;
-  } */
+  }
 
   Future<List> getTeacher(Teacher teacher) async {
     Database db = await this.db;
@@ -202,12 +147,12 @@ class DbHelper {
     return result.toList();
   }
 
-  /* Future<int> updateTeacher(Teacher teacher) async {
+  Future<int> updateTeacher(Teacher teacher) async {
     Database db = await this.db;
     var result = await db.update('Teacher', teacher.toMap(),
         where: "id = ?", whereArgs: [teacher.id]);
     return result;
-  } */
+  }
 
   Future<int> deleteTeacher(int id) async {
     Database db = await this.db;
@@ -242,5 +187,4 @@ class DbHelper {
         await db.delete('DaysOfWeek', where: "id = ?", whereArgs: [id]);
     return result;
   }
-}
- */
+}*/

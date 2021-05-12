@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:studo/view/examView.dart';
 import 'package:studo/view/teacherView.dart';
 import 'package:studo/view/subjectView.dart';
+import 'package:studo/view/classView.dart';
 
 class AppDrawer extends StatelessWidget {
   @override
@@ -43,6 +44,14 @@ class AppDrawer extends StatelessWidget {
           title: Text('Exams'),
           onTap: () {
             Navigator.of(context).pushReplacementNamed(ExamView.routeName);
+          },
+        ),
+        Divider(),
+        ListTile(
+          leading: Icon(Icons.timelapse),
+          title: Text('Classes'),
+          onTap: () {
+            Navigator.of(context).pushReplacementNamed(ClassView.routeName);
           },
         ),
         Divider(),
