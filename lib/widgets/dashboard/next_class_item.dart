@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 import 'package:studo/model/classModel.dart';
 
 import 'package:studo/model/subjectModel.dart';
+import 'package:studo/model/teacherModel.dart';
 import 'package:studo/widgets/class/class_item.dart';
 
 class NextClassItem extends StatelessWidget {
@@ -32,8 +33,10 @@ class NextClassItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final classData = Provider.of<Classes>(context);
     final subjectData = Provider.of<Subjects>(context);
+    final teacherData = Provider.of<Teachers>(context);
+
+    DateTime date = DateTime.now();
     return Card(
       borderOnForeground: false,
       shape: RoundedRectangleBorder(
@@ -45,18 +48,54 @@ class NextClassItem extends StatelessWidget {
         mainAxisSize: MainAxisSize.min,
         children: <Widget>[
           new ListTile(
-              leading: Text(type),
-              title: Text(
-                subjectData.findById(subjectID).name,
-                textAlign: TextAlign.center,
+              leading: Container(
+                constraints: BoxConstraints(
+                    minWidth: 100, maxWidth: 100, minHeight: 200),
+                child: Column(
+                  children: [
+                    Icon(Icons.school),
+                    Text(
+                      subjectData.findById(subjectID).name,
+                      textAlign: TextAlign.center,
+                    ),
+                    Text(type),
+                  ],
+                ),
               ),
-              subtitle: Text('Class time: ' + startTime + ' - ' + endTime),
-              trailing: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  //Text('Teacher: ' + teacherData.items[teacherID].name),
-                  Text('Room: ' + room),
-                ],
+              title: Container(
+                constraints: BoxConstraints(minWidth: 80, maxWidth: 80),
+                child: Text(
+                  subjectData.findById(subjectID).name,
+                  textAlign: TextAlign.center,
+                ),
+              ),
+              subtitle: Container(
+                constraints: BoxConstraints(minWidth: 80, maxWidth: 80),
+                child: Text(
+                    'Vrijeme predavanja: \n' + startTime + ' - ' + endTime),
+              ),
+              trailing: Container(
+                constraints: BoxConstraints(minWidth: 80, maxWidth: 120),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Row(
+                      children: [
+                        Icon(
+                          Icons.location_pin,
+                        ),
+                        Text('Prostorija: ' + room),
+                      ],
+                    ),
+                    Row(
+                      children: [
+                        Icon(Icons.people),
+                        Text('Profesor: ' +
+                            teacherData.findById(teacherID).name),
+                      ],
+                    ),
+                  ],
+                ),
               ),
               onTap: () {})
         ],

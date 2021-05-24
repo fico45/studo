@@ -37,6 +37,7 @@ class ExamView extends StatelessWidget {
                     ExamItem(
                       examData.items[i].id,
                       subjectData.findById(examData.items[i].subjectID).name,
+                      subjectData.findById(examData.items[i].subjectID).color,
                     ),
                     Divider(),
                   ],

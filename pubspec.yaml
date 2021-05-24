@@ -28,6 +28,7 @@ dependencies:
   date_time_picker: any
   weekday_selector: ^1.0.0
   flutter_slidable: ^0.5.7
+  http: ^0.12.0+2
   
 dev_dependencies:
   flutter_test:

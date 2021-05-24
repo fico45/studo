@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'dart:convert';
 
 import 'package:studo/model/subjectModel.dart';
 import 'package:studo/model/classModel.dart';
@@ -15,15 +16,17 @@ class NewClass extends StatefulWidget {
 
 class _NewClassState extends State<NewClass> {
   final _form = GlobalKey<FormState>();
-  String dropdownValue = '';
-  final values = <bool>[null, false, false, false, false, false, null];
+  String typeDropdownValue = '';
+  String subjectDropdownValue = '';
+  String teacherDropdownValue = '';
+  List values = <bool>[null, false, false, false, false, false, null];
 
   List<String> classTypes = [
-    "Lecture",
-    "Labs",
+    "Predavanje",
+    "Vježbe",
     "Seminar",
-    "Discussion",
-    "Studio",
+    "Rasprava",
+    "Labosi",
   ];
 
   var _editedClass = Class(
@@ -38,11 +41,11 @@ class _NewClassState extends State<NewClass> {
   );
 
   var _initValues = {
-    'subjectID': '',
-    'type': '',
+    'subjectID': null,
+    'type': null,
     'room': '',
-    'teacherID': '',
-    'daysOfWeek': '',
+    'teacherID': null,
+    'daysOfWeek': null,
     'startTime': '',
     'endTime': '',
   };
@@ -58,6 +61,7 @@ class _NewClassState extends State<NewClass> {
   void didChangeDependencies() {
     if (_isInit) {
       final classId = ModalRoute.of(context).settings.arguments as String;
+
       if (classId != null) {
         _editedClass = Provider.of<Classes>(
           context,
@@ -72,6 +76,7 @@ class _NewClassState extends State<NewClass> {
           'startTime': _editedClass.startTime,
           'endTime': _editedClass.endTime,
         };
+        values = List<bool>.from(json.decode(_editedClass.daysOfWeek));
       }
     }
     _isInit = false;
@@ -127,6 +132,7 @@ class _NewClassState extends State<NewClass> {
   }
 
   Widget build(BuildContext context) {
+    //List<bool> weekValues = json.decode(_editedClass.daysOfWeek);
     final subjectData = Provider.of<Subjects>(
       context,
       listen: false,
@@ -135,9 +141,10 @@ class _NewClassState extends State<NewClass> {
       context,
       listen: false,
     );
+
     return Scaffold(
       appBar: AppBar(
-        title: Text('Edit Class'),
+        title: Text('Uredi Predavanje'),
         actions: <Widget>[
           IconButton(
             icon: Icon(Icons.save),
@@ -157,17 +164,17 @@ class _NewClassState extends State<NewClass> {
                   children: <Widget>[
                     DropdownButtonFormField(
                       onChanged: (final String newValue) {
-                        dropdownValue = newValue;
+                        typeDropdownValue = newValue;
                       },
                       items: classTypes
-                          .map<DropdownMenuItem<String>>((String value) {
+                          .map<DropdownMenuItem<String>>((String typeValue) {
                         return DropdownMenuItem<String>(
-                          value: value,
-                          child: Text(value),
+                          value: typeValue,
+                          child: Text(typeValue),
                         );
                       }).toList(),
                       decoration: InputDecoration(
-                        labelText: 'Type',
+                        labelText: 'Tip',
                       ),
                       value: _initValues['type'],
                       onSaved: (value) {
@@ -185,7 +192,7 @@ class _NewClassState extends State<NewClass> {
                     ),
                     DropdownButtonFormField(
                       onChanged: (final String newValue) {
-                        dropdownValue = newValue;
+                        subjectDropdownValue = newValue;
                       },
                       items: subjectData.items
                           .map(
@@ -197,7 +204,7 @@ class _NewClassState extends State<NewClass> {
                           .toList(),
                       value: _initValues['subjectID'],
                       decoration: InputDecoration(
-                        labelText: 'Subject',
+                        labelText: 'Kolegij',
                       ),
                       onSaved: (value) {
                         _editedClass = Class(
@@ -214,7 +221,7 @@ class _NewClassState extends State<NewClass> {
                     ),
                     DropdownButtonFormField(
                       onChanged: (final String newValue) {
-                        dropdownValue = newValue;
+                        teacherDropdownValue = newValue;
                       },
                       items: teacherData.items
                           .map(
@@ -226,7 +233,7 @@ class _NewClassState extends State<NewClass> {
                           .toList(),
                       value: _initValues['teacherID'],
                       decoration: InputDecoration(
-                        labelText: 'Teacher',
+                        labelText: 'Profesor',
                       ),
                       onSaved: (value) {
                         _editedClass = Class(
@@ -252,7 +259,7 @@ class _NewClassState extends State<NewClass> {
                             type: DateTimePickerType.time,
                             initialValue: _initValues['startTime'],
                             icon: Icon(Icons.timer),
-                            timeLabelText: 'Start time',
+                            timeLabelText: 'Početak',
                             onChanged: (val) => print(val),
                             validator: (val) {
                               print(val);
@@ -279,7 +286,7 @@ class _NewClassState extends State<NewClass> {
                             type: DateTimePickerType.time,
                             initialValue: _initValues['endTime'],
                             icon: Icon(Icons.lock_clock),
-                            timeLabelText: 'End time',
+                            timeLabelText: 'Završetak',
                             onChanged: (val) => print(val),
                             validator: (val) {
                               print(val);
@@ -304,13 +311,13 @@ class _NewClassState extends State<NewClass> {
                     TextFormField(
                         validator: (value) {
                           if (value.isEmpty) {
-                            return 'Please provide a value.';
+                            return 'Unesite vrijednost.';
                           }
                           return null;
                         },
                         initialValue: _initValues['room'],
                         decoration: InputDecoration(
-                          labelText: 'Room',
+                          labelText: 'Prostorija',
                         ),
                         onSaved: (value) {
                           _editedClass = Class(
@@ -331,7 +338,7 @@ class _NewClassState extends State<NewClass> {
                       child: Column(
                         children: [
                           Text(
-                            'Select days of week for the class',
+                            'Odaberite dane predavanja',
                             textAlign: TextAlign.left,
                             style: TextStyle(fontWeight: FontWeight.bold),
                           ),
@@ -355,9 +362,11 @@ class _NewClassState extends State<NewClass> {
                                   startTime: _editedClass.startTime,
                                   endTime: _editedClass.endTime,
                                 );
+                                print(_editedClass.daysOfWeek);
                               });
                             },
                             values: values,
+                            //List.from(json.decode(_editedClass.daysOfWeek)),
                           ),
                         ],
                       ),

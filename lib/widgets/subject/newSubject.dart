@@ -85,11 +85,11 @@ class _NewSubjectState extends State<NewSubject> {
         await showDialog(
           context: context,
           builder: (ctx) => AlertDialog(
-            title: Text('An error occured'),
-            content: Text('Something went wrong.'),
+            title: Text('Došlo je do greške'),
+            content: Text('Nešto je pošlo po krivu.'),
             actions: <Widget>[
               TextButton(
-                child: Text('Okay'),
+                child: Text('U redu'),
                 onPressed: () {
                   Navigator.of(ctx).pop();
                 },
@@ -110,7 +110,7 @@ class _NewSubjectState extends State<NewSubject> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Edit Subject'),
+        title: Text('Uredi Kolegij'),
         backgroundColor: colorPicker,
         actions: <Widget>[
           IconButton(
@@ -138,7 +138,7 @@ class _NewSubjectState extends State<NewSubject> {
                       },
                       initialValue: _initValues['name'],
                       decoration: InputDecoration(
-                        labelText: 'Subject name',
+                        labelText: 'Naziv kolegija',
                       ),
                       onSaved: (value) {
                         _editedSubject = Subject(

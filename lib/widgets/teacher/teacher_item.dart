@@ -13,7 +13,6 @@ class TeacherItem extends StatelessWidget {
   Widget build(BuildContext context) {
     return ListTile(
       title: Text(name),
-      leading: CircleAvatar(),
       trailing: Container(
         width: 100,
         child: Row(
@@ -26,7 +25,7 @@ class TeacherItem extends StatelessWidget {
                   arguments: id,
                 );
               },
-              color: Theme.of(context).primaryColor,
+              color: Colors.orange,
             ),
             IconButton(
               icon: Icon(Icons.delete),

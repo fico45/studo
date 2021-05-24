@@ -3,17 +3,21 @@ import 'package:provider/provider.dart';
 
 import 'package:studo/model/examModel.dart';
 import 'package:studo/widgets/exam/newExam.dart';
+import 'package:studo/model/subjectModel.dart';
 
 class ExamItem extends StatelessWidget {
   final String id;
   final String name;
+  final String color;
 
-  ExamItem(this.id, this.name);
+  ExamItem(this.id, this.name, this.color);
+
+  Subject subject;
+
   @override
   Widget build(BuildContext context) {
     return ListTile(
       title: Text(name),
-      leading: CircleAvatar(),
       trailing: Container(
         width: 100,
         child: Row(
@@ -26,7 +30,7 @@ class ExamItem extends StatelessWidget {
                   arguments: id,
                 );
               },
-              color: Theme.of(context).primaryColor,
+              color: Colors.orange,
             ),
             IconButton(
               icon: Icon(Icons.delete),

@@ -13,6 +13,7 @@ class SubjectItem extends StatelessWidget {
 
   SubjectItem(this.id, this.name, this.color, this.year);
   Color avatarColor;
+  Subject subject;
 
   Color _getColorFromHex(String hexColor) {
     hexColor = color.replaceAll('#', "");
@@ -29,7 +30,7 @@ class SubjectItem extends StatelessWidget {
     return ListTile(
       title: Text(name),
       leading: CircleAvatar(
-        backgroundColor: avatarColor = _getColorFromHex(color),
+        backgroundColor: _getColorFromHex(color),
       ),
       trailing: Container(
         width: 100,
@@ -43,7 +44,7 @@ class SubjectItem extends StatelessWidget {
                   arguments: id,
                 );
               },
-              color: Theme.of(context).primaryColor,
+              color: Colors.orange,
             ),
             IconButton(
               icon: Icon(Icons.delete),

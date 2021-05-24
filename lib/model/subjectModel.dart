@@ -1,4 +1,7 @@
+import 'dart:convert';
 import 'package:flutter/material.dart';
+
+import 'package:http/http.dart' as http;
 
 class Subject with ChangeNotifier {
   String id;
@@ -46,15 +49,27 @@ class Subjects with ChangeNotifier {
   }
 
   Future<void> addSubject(Subject subject) async {
-    final newSubject = Subject(
-      id: DateTime.now().toString(),
-      name: subject.name,
-      color: subject.color,
-      year: subject.year,
-    );
-    _items.add(newSubject);
-    print(newSubject.id);
-    notifyListeners();
+    const url =
+        'https://studo-afbaa-default-rtdb.europe-west1.firebasedatabase.app/subjects.json';
+    try {
+      final response = await http.post(url,
+          body: json.encode({
+            'name': subject.name,
+            'color': subject.color,
+            'year': subject.year
+          }));
+      final newSubject = Subject(
+        id: DateTime.now().toString(),
+        name: subject.name,
+        color: subject.color,
+        year: subject.year,
+      );
+      _items.add(newSubject);
+      print(newSubject.id);
+      notifyListeners();
+    } catch (error) {
+      throw (error);
+    }
   }
 
   Subject findById(String id) {

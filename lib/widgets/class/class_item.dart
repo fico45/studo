@@ -8,7 +8,6 @@ import 'package:studo/model/subjectModel.dart';
 import 'package:studo/model/teacherModel.dart';
 import 'package:studo/widgets/class/newClass.dart';
 import 'package:studo/widgets/daysOfWeekWidget.dart';
-import 'package:studo/widgets/subject/newSubject.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 
 class ClassItem extends StatelessWidget {
@@ -24,9 +23,7 @@ class ClassItem extends StatelessWidget {
 
   ClassItem(this.id, this.subjectID, this.type, this.room, this.teacherID,
       this.daysOfWeek, this.startTime, this.endTime, this.subjectColor);
-  Color bColor;
-
-  bool threeLine = false;
+  static Color bColor;
 
   Color _getColorFromHex(String hexColor) {
     hexColor = subjectColor.replaceAll('#', "");
@@ -54,13 +51,9 @@ class ClassItem extends StatelessWidget {
       context,
       listen: false,
     );
-    final classData = Provider.of<Classes>(
-      context,
-      listen: false,
-    );
+
     final teacherData = Provider.of<Teachers>(
       context,
-      listen: false,
     );
 
     return Slidable(
@@ -68,7 +61,7 @@ class ClassItem extends StatelessWidget {
       actionExtentRatio: 0.25,
       secondaryActions: <Widget>[
         IconSlideAction(
-          caption: 'Edit',
+          caption: 'Uredi',
           color: Colors.grey,
           icon: Icons.edit,
           onTap: () {
@@ -76,24 +69,24 @@ class ClassItem extends StatelessWidget {
           },
         ),
         IconSlideAction(
-          caption: 'Delete',
+          caption: 'Obriši',
           color: Colors.red,
           icon: Icons.delete,
           onTap: () {
             return showDialog(
               context: context,
               builder: (ctx) => AlertDialog(
-                title: Text('Are you sure?'),
-                content: Text('Do you want to remove the class?'),
+                title: Text('Jeste li sigurni?'),
+                content: Text('Da li zaista želite obrisati predavanje?'),
                 actions: <Widget>[
                   TextButton(
-                    child: Text('No'),
+                    child: Text('Ne'),
                     onPressed: () {
                       Navigator.of(ctx).pop(false);
                     },
                   ),
                   TextButton(
-                    child: Text('Yes'),
+                    child: Text('Da'),
                     onPressed: () {
                       Navigator.of(ctx).pop(true);
                       Provider.of<Classes>(context, listen: false)
@@ -117,25 +110,20 @@ class ClassItem extends StatelessWidget {
           mainAxisSize: MainAxisSize.min,
           children: <Widget>[
             new ListTile(
-                leading: Text(type),
-                title: Text(
-                  subjectData.findById(subjectID).name,
-                  textAlign: TextAlign.center,
-                ),
-                subtitle: Text('Class time: ' + startTime + ' - ' + endTime),
-                trailing: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Text('Teacher: ' +
-                        teacherData.items[int.parse(teacherID)].name),
-                    Text('Room: ' + room),
-                  ],
-                ),
-                isThreeLine: threeLine,
-                onTap: () {
-                  //threeLine = !threeLine;
-                  //(context as Element).markNeedsBuild();
-                })
+              leading: Text(type),
+              title: Text(
+                subjectData.findById(subjectID).name,
+                textAlign: TextAlign.center,
+              ),
+              subtitle: Text('Vrijeme: ' + startTime + ' - ' + endTime),
+              trailing: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text('Profesor: ' + teacherData.findById(teacherID).name),
+                  Text('Prostorija: ' + room),
+                ],
+              ),
+            )
           ],
         ),
       ),

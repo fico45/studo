@@ -1,4 +1,7 @@
+import 'dart:convert';
 import 'package:flutter/material.dart';
+
+import 'package:http/http.dart' as http;
 
 class Exam with ChangeNotifier {
   final String id;
@@ -41,15 +44,31 @@ class Exams with ChangeNotifier {
   }
 
   Future<void> addExam(Exam exam) async {
-    final newExam = Exam(
-      id: DateTime.now().toString(),
-      subjectID: exam.subjectID,
-      examTimeDate: exam.examTimeDate,
-      location: exam.location,
-      description: exam.description,
-    );
-    _items.add(newExam);
-    notifyListeners();
+    const url =
+        'https://studo-afbaa-default-rtdb.europe-west1.firebasedatabase.app/exams.json';
+
+    try {
+      final response = await http.post(
+        url,
+        body: json.encode({
+          'subjectID': exam.subjectID,
+          'examTimeDate': exam.examTimeDate,
+          'location': exam.location,
+          'description': exam.description,
+        }),
+      );
+      final newExam = Exam(
+        id: DateTime.now().toString(),
+        subjectID: exam.subjectID,
+        examTimeDate: exam.examTimeDate,
+        location: exam.location,
+        description: exam.description,
+      );
+      _items.add(newExam);
+      notifyListeners();
+    } catch (error) {
+      throw (error);
+    }
   }
 
   Exam findById(String id) {

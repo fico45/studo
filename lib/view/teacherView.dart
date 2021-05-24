@@ -6,8 +6,44 @@ import 'package:studo/widgets/teacher/newTeacher.dart';
 import 'package:studo/widgets/teacher/teacher_item.dart';
 import '../widgets/app_drawer.dart';
 
-class TeacherView extends StatelessWidget {
+class TeacherView extends StatefulWidget {
   static const routeName = '/teacher-view';
+
+  @override
+  _TeacherViewState createState() => _TeacherViewState();
+}
+
+class _TeacherViewState extends State<TeacherView> {
+  var _isInit = true;
+  var _isLoading = false;
+  @override
+  void didChangeDependencies() {
+    if (_isInit) {
+      setState(() {
+        _isLoading = true;
+      });
+
+      Provider.of<Teachers>(context).fetchTeachers().then((_) {
+        setState(() {
+          _isLoading = false;
+        });
+      });
+    }
+    _isInit = false;
+    super.didChangeDependencies();
+  }
+
+  @override
+  void initState() {
+    Provider.of<Teachers>(
+      context,
+      listen: false,
+    ).fetchTeachers();
+    /*Future.delayed(Duration.zero).then((_) {
+      Provider.of<Teachers>(context, listen: false).fetchTeachers();
+    });*/
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -25,21 +61,25 @@ class TeacherView extends StatelessWidget {
         ],
       ),
       drawer: AppDrawer(),
-      body: Padding(
-        padding: EdgeInsets.all(8),
-        child: ListView.builder(
-          itemCount: teachersData.items.length,
-          itemBuilder: (_, i) => Column(
-            children: [
-              TeacherItem(
-                teachersData.items[i].id,
-                teachersData.items[i].name,
+      body: _isInit
+          ? Center(
+              child: CircularProgressIndicator(),
+            )
+          : Padding(
+              padding: EdgeInsets.all(8),
+              child: ListView.builder(
+                itemCount: teachersData.items.length,
+                itemBuilder: (_, i) => Column(
+                  children: [
+                    TeacherItem(
+                      teachersData.items[i].id,
+                      teachersData.items[i].name,
+                    ),
+                    Divider(),
+                  ],
+                ),
               ),
-              Divider(),
-            ],
-          ),
-        ),
-      ),
+            ),
     );
   }
 }

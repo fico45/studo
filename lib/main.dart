@@ -65,14 +65,43 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
+  var _isInit = true;
+  var _isLoading = false;
+
+  @override
+  void didChangeDependencies() {
+    if (_isInit) {
+      setState(() {
+        _isLoading = true;
+      });
+      Provider.of<Teachers>(context, listen: false);
+      Provider.of<Exams>(context, listen: false);
+      Provider.of<Subjects>(context, listen: false);
+      Provider.of<Classes>(
+        context,
+        listen: false,
+      ).getItems().then((_) {
+        setState(() {
+          _isLoading = false;
+        });
+      });
+    }
+    _isInit = false;
+    super.didChangeDependencies();
+  }
+
   @override
   Widget build(BuildContext context) {
-    return new Scaffold(
-      appBar: AppBar(
-        title: new Text(widget.title),
-      ),
-      body: Dashboard(),
-      drawer: AppDrawer(),
-    );
+    return _isInit
+        ? Center(
+            child: CircularProgressIndicator(),
+          )
+        : new Scaffold(
+            appBar: AppBar(
+              title: new Text(widget.title),
+            ),
+            body: Dashboard(),
+            drawer: AppDrawer(),
+          );
   }
 }

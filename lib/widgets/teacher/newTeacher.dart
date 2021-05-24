@@ -72,11 +72,11 @@ class _NewTeacherState extends State<NewTeacher> {
         await showDialog(
           context: context,
           builder: (ctx) => AlertDialog(
-            title: Text('An error occured'),
-            content: Text('Something went wrong.'),
+            title: Text('Došlo je do greške'),
+            content: Text('Nešto je pošlo po krivu.'),
             actions: <Widget>[
               TextButton(
-                child: Text('Okay'),
+                child: Text('U redu'),
                 onPressed: () {
                   Navigator.of(ctx).pop();
                 },
@@ -96,7 +96,7 @@ class _NewTeacherState extends State<NewTeacher> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Edit Teacher'),
+        title: Text('Uredi Profesora'),
         actions: <Widget>[
           IconButton(
             icon: Icon(Icons.save),
@@ -117,13 +117,13 @@ class _NewTeacherState extends State<NewTeacher> {
                     TextFormField(
                         validator: (value) {
                           if (value.isEmpty) {
-                            return 'Please provide a value.';
+                            return 'Unesite vrijednost.';
                           }
                           return null;
                         },
                         initialValue: _initValues['name'],
                         decoration: InputDecoration(
-                          labelText: 'Teacher name',
+                          labelText: 'Ime profesora',
                         ),
                         onSaved: (value) {
                           _editedTeacher = Teacher(

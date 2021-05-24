@@ -1,15 +1,76 @@
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:studo/model/classModel.dart';
+import 'package:studo/model/subjectModel.dart';
+import 'package:studo/model/teacherModel.dart';
 
 class ActiveClassItem extends StatefulWidget {
+  final String id;
+  final String subjectID;
+  final String type;
+  final String room;
+  final String teacherID;
+  final String daysOfWeek;
+  final String startTime;
+  final String endTime;
+  final String subjectColor;
+  ActiveClassItem(this.id, this.subjectID, this.type, this.room, this.teacherID,
+      this.daysOfWeek, this.startTime, this.endTime, this.subjectColor);
   @override
   _ActiveClassItemState createState() => _ActiveClassItemState();
 }
 
-class _ActiveClassItemState extends State<ActiveClassItem> {
+ActiveClassItem active;
+int startHours = int.parse(active.startTime[0] + active.startTime[1]);
+int startMinutes = int.parse(active.startTime[3] + active.startTime[4]);
+int endHours = int.parse(active.endTime[0] + active.endTime[1]);
+int endMinutes = int.parse(active.endTime[3] + active.endTime[4]);
+
+class _ActiveClassItemState extends State<ActiveClassItem>
+    with TickerProviderStateMixin {
+  AnimationController controller;
+
+  int getDuration() {
+    DateTime time = DateTime.now();
+    int startHours = time.hour;
+    int startMinutes = time.minute;
+    int endHours = int.parse(active.endTime[0] + active.endTime[1]);
+    int endMinutes = int.parse(active.endTime[3] + active.endTime[4]);
+
+    if (endMinutes - startMinutes < 0) {
+      return (endMinutes + startMinutes) * (endHours - startHours) + 1;
+    } else
+      return (endMinutes + startMinutes) * (endHours - startHours);
+  }
+
+  @override
+  void initState() {
+    controller = AnimationController(
+      vsync: this,
+      duration: Duration(seconds: 15),
+    )..addListener(() {
+        setState(() {});
+      });
+    controller.repeat(reverse: false);
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    controller.dispose();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
+    final classData = Provider.of<Classes>(context);
+    final subjectData = Provider.of<Subjects>(context);
+    final teacherData = Provider.of<Teachers>(context);
+
+    DateTime date = DateTime.now();
+
     Size size = MediaQuery.of(context).size;
     return Card(
       color: Colors.orangeAccent,
@@ -41,11 +102,14 @@ class _ActiveClassItemState extends State<ActiveClassItem> {
                       children: [
                         Icon(Icons.school),
                         Text(
-                          'Matematika',
+                          subjectData
+                              .items[
+                                  int.parse(classData.todayItems[0].subjectID)]
+                              .name,
                           textScaleFactor: 1.6,
                         ),
                         Text(
-                          'Lecture',
+                          classData.todayItems[0].type,
                           textScaleFactor: 1.4,
                         ),
                       ],
@@ -57,18 +121,18 @@ class _ActiveClassItemState extends State<ActiveClassItem> {
                       Padding(
                         padding: EdgeInsets.only(
                           right: 30,
-                          left: size.width * 0.4,
+                          left: size.width * 0.35,
                         ),
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.start,
                           children: [
                             Icon(
                               Icons.location_pin,
-                              size: 45,
+                              size: 30,
                             ),
                             Text(
-                              '403',
-                              textScaleFactor: 1.8,
+                              classData.todayItems[0].room,
+                              textScaleFactor: 1.7,
                             ),
                           ],
                         ),
@@ -88,18 +152,21 @@ class _ActiveClassItemState extends State<ActiveClassItem> {
                         Row(
                           children: [
                             Text(
-                              '15:45',
+                              classData.todayItems[0].startTime,
                               textAlign: TextAlign.start,
                             ),
                             SizedBox(
-                              width: 300,
-                              height: 8,
-                              child: Container(
-                                color: Colors.blue,
+                              width: size.width * 0.7,
+                              child: LinearProgressIndicator(
+                                value: controller.value,
+                                backgroundColor: Colors.cyanAccent,
+                                valueColor: new AlwaysStoppedAnimation<Color>(
+                                    Colors.blue),
+                                minHeight: 6,
                               ),
                             ),
                             Text(
-                              '16:30',
+                              classData.todayItems[0].endTime,
                               textAlign: TextAlign.start,
                             ),
                           ],
@@ -115,7 +182,9 @@ class _ActiveClassItemState extends State<ActiveClassItem> {
                 child: Row(children: [
                   Icon(Icons.people),
                   Text(
-                    'Teacher name',
+                    teacherData
+                        .items[int.parse(classData.todayItems[0].teacherID)]
+                        .name,
                     textScaleFactor: 1.6,
                   ),
                 ]),
