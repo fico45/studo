@@ -1,13 +1,37 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import '../widgets/app_drawer.dart';
 import 'package:studo/widgets/subject/newSubject.dart';
 import 'package:studo/widgets/subject/subject_item.dart';
 import 'package:studo/model/subjectModel.dart';
 
-class SubjectView extends StatelessWidget {
+class SubjectView extends StatefulWidget {
   static const routeName = '/subject-view';
+
+  @override
+  _SubjectViewState createState() => _SubjectViewState();
+}
+
+class _SubjectViewState extends State<SubjectView> {
+  var _isInit = true;
+  var _isLoading = false;
+  @override
+  void didChangeDependencies() {
+    if (_isInit) {
+      setState(() {
+        _isLoading = true;
+      });
+
+      Provider.of<Subjects>(context).getItems().then((_) {
+        setState(() {
+          _isLoading = false;
+        });
+      });
+    }
+    _isInit = false;
+    super.didChangeDependencies();
+  }
+
   @override
   Widget build(BuildContext context) {
     final subjectsData = Provider.of<Subjects>(context);
@@ -23,7 +47,6 @@ class SubjectView extends StatelessWidget {
           ),
         ],
       ),
-      drawer: AppDrawer(),
       body: Padding(
         padding: EdgeInsets.all(8),
         child: ListView.builder(

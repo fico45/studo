@@ -4,7 +4,7 @@ import 'package:provider/provider.dart';
 import 'package:studo/model/classModel.dart';
 import 'package:studo/widgets/class/newClass.dart';
 import 'package:studo/widgets/class/class_item.dart';
-import '../widgets/app_drawer.dart';
+
 import 'package:studo/model/subjectModel.dart';
 
 class ClassView extends StatefulWidget {
@@ -65,7 +65,6 @@ class _ClassViewState extends State<ClassView> {
           ),
         ],
       ),
-      drawer: AppDrawer(),
       body: _isInit
           ? Center(
               child: CircularProgressIndicator(),

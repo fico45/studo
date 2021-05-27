@@ -7,8 +7,9 @@ import 'package:studo/view/examView.dart';
 import 'package:studo/view/teacherView.dart';
 import 'package:studo/view/classView.dart';
 import 'package:studo/view/settingsView.dart';
-import 'package:studo/widgets/app_drawer.dart';
+import 'package:studo/widgets/dash_drawer.dart';
 import 'package:studo/widgets/class/newClass.dart';
+import 'package:studo/widgets/fab.dart';
 import 'package:studo/widgets/teacher/newTeacher.dart';
 import './model/teacherModel.dart';
 import './widgets/subject/newSubject.dart';
@@ -34,7 +35,9 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider(
           create: (ctx) => Exams(),
         ),
-        ChangeNotifierProvider(create: (ctx) => Classes())
+        ChangeNotifierProvider(
+          create: (ctx) => Classes(),
+        ),
       ],
       child: MaterialApp(
         title: 'StuDo',
@@ -51,6 +54,7 @@ class MyApp extends StatelessWidget {
           NewExam.routeName: (context) => NewExam(),
           NewClass.routeName: (context) => NewClass(),
           ClassView.routeName: (context) => ClassView(),
+          DashDrawer.routeName: (context) => DashDrawer(),
         },
       ),
     );
@@ -74,13 +78,11 @@ class _MyHomePageState extends State<MyHomePage> {
       setState(() {
         _isLoading = true;
       });
-      Provider.of<Teachers>(context, listen: false);
-      Provider.of<Exams>(context, listen: false);
-      Provider.of<Subjects>(context, listen: false);
-      Provider.of<Classes>(
-        context,
-        listen: false,
-      ).getItems().then((_) {
+      Provider.of<Subjects>(context, listen: false).getItems();
+      Provider.of<Teachers>(context, listen: false).fetchTeachers();
+      Provider.of<Exams>(context, listen: false).getItems();
+
+      Provider.of<Classes>(context, listen: false).getItems().then((_) {
         setState(() {
           _isLoading = false;
         });
@@ -101,7 +103,7 @@ class _MyHomePageState extends State<MyHomePage> {
               title: new Text(widget.title),
             ),
             body: Dashboard(),
-            drawer: AppDrawer(),
+            floatingActionButton: ExpandableFab(),
           );
   }
 }

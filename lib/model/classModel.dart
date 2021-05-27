@@ -1,9 +1,7 @@
-import 'dart:collection';
 import 'dart:convert';
 import 'package:flutter/material.dart';
 
 import 'package:http/http.dart' as http;
-import 'package:studo/model/daysOfWeekModel.dart';
 
 class Class with ChangeNotifier {
   final String id;
@@ -52,12 +50,17 @@ class Classes with ChangeNotifier {
   ];
 
   List<Class> _todayItems = [];
+  List<Class> _upcomingClasses = [];
   List<Class> get items {
     return [..._items];
   }
 
   List<Class> get todayItems {
     return [..._todayItems];
+  }
+
+  List<Class> get upcomingClasses {
+    return [..._upcomingClasses];
   }
 
   Future<void> getItems() async {
@@ -67,21 +70,23 @@ class Classes with ChangeNotifier {
       final response = await http.get(url);
       final extractedData = json.decode(response.body) as Map<String, dynamic>;
       final List<Class> loadedClasses = [];
-      extractedData.forEach((classId, classData) {
-        loadedClasses.add(Class(
-          id: classData['id'],
-          subjectID: classData['subjectID'],
-          type: classData['type'],
-          room: classData['room'],
-          teacherID: classData['teacherID'],
-          daysOfWeek: classData['daysOfWeek'],
-          startTime: classData['startTime'],
-          endTime: classData['endTime'],
-        ));
-      });
-      _items = loadedClasses;
-      getGodayItems();
-      notifyListeners();
+      if (extractedData != null) {
+        extractedData.forEach((classId, classData) {
+          loadedClasses.add(Class(
+            id: classData['id'],
+            subjectID: classData['subjectID'],
+            type: classData['type'],
+            room: classData['room'],
+            teacherID: classData['teacherID'],
+            daysOfWeek: classData['daysOfWeek'],
+            startTime: classData['startTime'],
+            endTime: classData['endTime'],
+          ));
+        });
+        _items = loadedClasses;
+        getGodayItems();
+        notifyListeners();
+      }
     } catch (error) {
       throw (error);
     }
@@ -92,107 +97,38 @@ class Classes with ChangeNotifier {
       DateTime date = DateTime.now();
       print('Sada je:' + date.hour.toString());
       print('Kaže: ');
-      _todayItems = _items.where(
-        (cl) {
-          if (date.weekday == 7 &&
-              json.decode(cl.daysOfWeek)[0] == true &&
-              int.parse(cl.startTime) > date.hour) {
-            return true;
-          } else if (json.decode(cl.daysOfWeek)[date.weekday] == true) {
-            if (int.parse(cl.endTime[0] + cl.endTime[1]) > date.hour) {
-              if (int.parse(cl.endTime[3] + cl.endTime[4]) > date.minute) {
+      if (_items != null) {
+        _todayItems = _items.where(
+          (cl) {
+            if (date.weekday == 7 &&
+                json.decode(cl.daysOfWeek)[0] == true &&
+                int.parse(cl.endTime) > date.hour) {
+              return true;
+            } else if /* (json.decode(cl.daysOfWeek)[date.weekday] == true &&
+                DateTime.parse(cl.endTime).isBefore(DateTime.now())) {
+              return true;
+            } */
+
+                (json.decode(cl.daysOfWeek)[date.weekday] == true) {
+              if (int.parse(cl.endTime[0] + cl.endTime[1]) > date.hour) {
                 return true;
               }
+              return true;
             }
-          }
-          return false;
-        },
-      ).toList();
-      _todayItems.sort((a, b) {
-        var aTime = a.startTime;
-        var bTime = b.startTime;
-        return -bTime.compareTo(aTime);
-      });
+            return false;
+          },
+        ).toList();
+        _todayItems.sort((a, b) {
+          var aTime = a.startTime;
+          var bTime = b.startTime;
+          return -bTime.compareTo(aTime);
+        });
+      }
+      _upcomingClasses = _todayItems.skip(1).toList();
       notifyListeners();
-
-      /* _items.forEach((classData) {
-        print(json.decode(classData.daysOfWeek)[date.weekday]);
-        //print(date.weekday);
-        if (date.day == 7 && json.decode(classData.daysOfWeek)[0] == true) {
-          todayItems.add(Class(
-            id: classData.id,
-            subjectID: classData.subjectID,
-            type: classData.type,
-            room: classData.room,
-            teacherID: classData.teacherID,
-            daysOfWeek: classData.daysOfWeek,
-            startTime: classData.startTime,
-            endTime: classData.endTime,
-          ));
-        } else if (json.decode(classData.daysOfWeek)[date.weekday] == true) {
-          todayItems.add(Class(
-            id: classData.id,
-            subjectID: classData.subjectID,
-            type: classData.type,
-            room: classData.room,
-            teacherID: classData.teacherID,
-            daysOfWeek: classData.daysOfWeek,
-            startTime: classData.startTime,
-            endTime: classData.endTime,
-          ));
-        }
-      });
-
-      notifyListeners();
-      print('Itemi: ' + todayItems.toString());
-      print('Dužina: ' + todayItems.length.toString()); */
-
-      /* const url =
-          'https://studo-afbaa-default-rtdb.europe-west1.firebasedatabase.app/classes.json';
-      final response = await http.get(url);
-      final List<Class> todayClasses = [];
-      final extractedData = json.decode(response.body) as Map<String, dynamic>;
-      extractedData.forEach((key, classData) {
-        if (date.day == 7 && classData.daysOfWeek[0] == true) {
-          todayClasses.add(Class(
-            id: classData['id'],
-            subjectID: classData['subjectID'],
-            type: classData['type'],
-            room: classData['room'],
-            teacherID: classData['teacherID'],
-            daysOfWeek: classData['daysOfWeek'],
-            startTime: classData['startTime'],
-            endTime: classData['endTime'],
-          ));
-        } else if (classData.daysOfWeek[date.day] == true) {
-          todayClasses.add(Class(
-            id: classData['id'],
-            subjectID: classData['subjectID'],
-            type: classData['type'],
-            room: classData['room'],
-            teacherID: classData['teacherID'],
-            daysOfWeek: classData['daysOfWeek'],
-            startTime: classData['startTime'],
-            endTime: classData['endTime'],
-          ));
-        }
-      });
-      _todayItems = todayClasses;
-      notifyListeners(); */
     } catch (error) {
       throw (error);
     }
-    /*  _items.where(
-      (cl) {
-        if (date.day == 7 && cl.daysOfWeek[0] == true) {
-          return true;
-        } else if (cl.daysOfWeek[date.day] == true) {
-          print(cl.daysOfWeek[date.day]);
-          return true;
-        }
-        return false;
-      },
-    ).toList(); */
   }
 
   void deleteClass(String id) {

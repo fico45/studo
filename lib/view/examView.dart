@@ -4,7 +4,6 @@ import 'package:provider/provider.dart';
 import 'package:studo/model/examModel.dart';
 import 'package:studo/widgets/exam/newExam.dart';
 import 'package:studo/widgets/exam/exam_item.dart';
-import '../widgets/app_drawer.dart';
 import 'package:studo/model/subjectModel.dart';
 
 class ExamView extends StatelessWidget {
@@ -27,7 +26,6 @@ class ExamView extends StatelessWidget {
           ),
         ],
       ),
-      drawer: AppDrawer(),
       body: Padding(
         padding: EdgeInsets.all(8),
         child: ListView.builder(

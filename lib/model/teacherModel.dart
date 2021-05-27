@@ -42,12 +42,15 @@ class Teachers with ChangeNotifier {
       final response = await http.get(url);
       final extractedData = json.decode(response.body) as Map<String, dynamic>;
       final List<Teacher> loadedTeachers = [];
-      extractedData.forEach((teacherId, teacherData) {
-        loadedTeachers.add(Teacher(
-          id: teacherData['id'],
-          name: teacherData['name'],
-        ));
-      });
+      if (extractedData != null) {
+        extractedData.forEach((teacherId, teacherData) {
+          loadedTeachers.add(Teacher(
+            id: teacherData['id'],
+            name: teacherData['name'],
+          ));
+        });
+      }
+
       _items = loadedTeachers;
       notifyListeners();
     } catch (error) {
@@ -68,7 +71,7 @@ class Teachers with ChangeNotifier {
           .post(
         url,
         body: json.encode({
-          //'id': newTeacher.id,
+          'id': newTeacher.id,
           'name': newTeacher.name,
         }),
       )

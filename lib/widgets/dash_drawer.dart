@@ -4,28 +4,20 @@ import 'package:studo/view/teacherView.dart';
 import 'package:studo/view/subjectView.dart';
 import 'package:studo/view/classView.dart';
 
-class AppDrawer extends StatelessWidget {
+class DashDrawer extends StatelessWidget {
+  static const routeName = '/drawer';
   @override
   Widget build(BuildContext context) {
-    return Drawer(
-        child: Column(
+    return Scaffold(
+        body: ListView(
       children: <Widget>[
         AppBar(
-          title: Text('Hello Friend!'),
+          title: Text('Pregled kategorija'),
           automaticallyImplyLeading: false,
         ),
-        Divider(),
-        ListTile(
-          leading: Icon(Icons.dashboard),
-          title: Text('Dashboard'),
-          onTap: () {
-            Navigator.of(context).pushReplacementNamed('/');
-          },
-        ),
-        Divider(),
         ListTile(
           leading: Icon(Icons.people),
-          title: Text('Teachers'),
+          title: Text('Profesori'),
           onTap: () {
             Navigator.of(context).pushReplacementNamed(TeacherView.routeName);
           },
@@ -33,25 +25,25 @@ class AppDrawer extends StatelessWidget {
         Divider(),
         ListTile(
           leading: Icon(Icons.school),
-          title: Text('Subjects'),
+          title: Text('Kolegiji'),
           onTap: () {
             Navigator.of(context).pushReplacementNamed(SubjectView.routeName);
           },
         ),
         Divider(),
         ListTile(
-          leading: Icon(Icons.book),
-          title: Text('Exams'),
+          leading: Icon(Icons.timelapse),
+          title: Text('Predavanja'),
           onTap: () {
-            Navigator.of(context).pushReplacementNamed(ExamView.routeName);
+            Navigator.of(context).pushReplacementNamed(ClassView.routeName);
           },
         ),
         Divider(),
         ListTile(
-          leading: Icon(Icons.timelapse),
-          title: Text('Classes'),
+          leading: Icon(Icons.book),
+          title: Text('Ispiti'),
           onTap: () {
-            Navigator.of(context).pushReplacementNamed(ClassView.routeName);
+            Navigator.of(context).pushReplacementNamed(ExamView.routeName);
           },
         ),
         Divider(),

@@ -7,7 +7,6 @@ import 'package:studo/model/classModel.dart';
 import 'package:studo/model/subjectModel.dart';
 import 'package:studo/model/teacherModel.dart';
 import 'package:studo/widgets/class/newClass.dart';
-import 'package:studo/widgets/daysOfWeekWidget.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 
 class ClassItem extends StatelessWidget {

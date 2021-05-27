@@ -20,7 +20,7 @@ class Exam with ChangeNotifier {
 
 class Exams with ChangeNotifier {
   List<Exam> _items = [
-    Exam(
+    /* Exam(
         id: '0',
         subjectID: '1',
         examTimeDate: '2021-04-02 14:45',
@@ -31,11 +31,37 @@ class Exams with ChangeNotifier {
         subjectID: '0',
         examTimeDate: '2021-04-15 16:45',
         location: '402',
-        description: 'Ne zaboravi olovku!'),
+        description: 'Ne zaboravi olovku!'), */
   ];
 
   List<Exam> get items {
     return [..._items];
+  }
+
+  Future<void> getItems() async {
+    try {
+      const url =
+          'https://studo-afbaa-default-rtdb.europe-west1.firebasedatabase.app/exams.json';
+      final response = await http.get(url);
+      final extractedData = json.decode(response.body) as Map<String, dynamic>;
+      final List<Exam> loadedExams = [];
+      if (extractedData != null) {
+        extractedData.forEach((examId, examData) {
+          loadedExams.add(Exam(
+            id: examData['id'],
+            subjectID: examData['subjectID'],
+            examTimeDate: examData['examTimeDate'],
+            location: examData['examTimeDate'],
+            description: examData['description'],
+          ));
+        });
+        _items = loadedExams;
+
+        notifyListeners();
+      }
+    } catch (error) {
+      throw (error);
+    }
   }
 
   void deleteExam(String id) {
@@ -48,15 +74,6 @@ class Exams with ChangeNotifier {
         'https://studo-afbaa-default-rtdb.europe-west1.firebasedatabase.app/exams.json';
 
     try {
-      final response = await http.post(
-        url,
-        body: json.encode({
-          'subjectID': exam.subjectID,
-          'examTimeDate': exam.examTimeDate,
-          'location': exam.location,
-          'description': exam.description,
-        }),
-      );
       final newExam = Exam(
         id: DateTime.now().toString(),
         subjectID: exam.subjectID,
@@ -64,8 +81,20 @@ class Exams with ChangeNotifier {
         location: exam.location,
         description: exam.description,
       );
-      _items.add(newExam);
-      notifyListeners();
+      await http
+          .post(
+        url,
+        body: json.encode({
+          'subjectID': exam.subjectID,
+          'examTimeDate': exam.examTimeDate,
+          'location': exam.location,
+          'description': exam.description,
+        }),
+      )
+          .then((response) {
+        _items.add(newExam);
+        notifyListeners();
+      });
     } catch (error) {
       throw (error);
     }

@@ -58,14 +58,13 @@ class NextClassItem extends StatelessWidget {
                       subjectData.findById(subjectID).name,
                       textAlign: TextAlign.center,
                     ),
-                    Text(type),
                   ],
                 ),
               ),
               title: Container(
                 constraints: BoxConstraints(minWidth: 80, maxWidth: 80),
                 child: Text(
-                  subjectData.findById(subjectID).name,
+                  type,
                   textAlign: TextAlign.center,
                 ),
               ),

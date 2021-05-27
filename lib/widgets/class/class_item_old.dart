@@ -6,7 +6,7 @@ import 'package:provider/provider.dart';
 import 'package:studo/model/classModel.dart';
 import 'package:studo/model/subjectModel.dart';
 import 'package:studo/model/teacherModel.dart';
-import 'package:studo/widgets/daysOfWeekWidget.dart';
+
 import 'package:studo/widgets/subject/newSubject.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 
@@ -53,10 +53,7 @@ class ClassItem extends StatelessWidget {
       context,
       listen: false,
     );
-    final classData = Provider.of<Classes>(
-      context,
-      listen: false,
-    );
+
     final teacherData = Provider.of<Teachers>(
       context,
       listen: false,

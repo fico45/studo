@@ -2,13 +2,13 @@ import 'dart:ui';
 
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:studo/model/classModel.dart';
+
 import 'package:studo/model/subjectModel.dart';
 import 'package:studo/model/teacherModel.dart';
 
-class ActiveClassItem extends StatefulWidget {
+class ActiveClassItem extends StatelessWidget {
   final String id;
-  final String subjectID;
+  final String subjectName;
   final String type;
   final String room;
   final String teacherID;
@@ -16,57 +16,19 @@ class ActiveClassItem extends StatefulWidget {
   final String startTime;
   final String endTime;
   final String subjectColor;
-  ActiveClassItem(this.id, this.subjectID, this.type, this.room, this.teacherID,
-      this.daysOfWeek, this.startTime, this.endTime, this.subjectColor);
-  @override
-  _ActiveClassItemState createState() => _ActiveClassItemState();
-}
-
-ActiveClassItem active;
-int startHours = int.parse(active.startTime[0] + active.startTime[1]);
-int startMinutes = int.parse(active.startTime[3] + active.startTime[4]);
-int endHours = int.parse(active.endTime[0] + active.endTime[1]);
-int endMinutes = int.parse(active.endTime[3] + active.endTime[4]);
-
-class _ActiveClassItemState extends State<ActiveClassItem>
-    with TickerProviderStateMixin {
-  AnimationController controller;
-
-  int getDuration() {
-    DateTime time = DateTime.now();
-    int startHours = time.hour;
-    int startMinutes = time.minute;
-    int endHours = int.parse(active.endTime[0] + active.endTime[1]);
-    int endMinutes = int.parse(active.endTime[3] + active.endTime[4]);
-
-    if (endMinutes - startMinutes < 0) {
-      return (endMinutes + startMinutes) * (endHours - startHours) + 1;
-    } else
-      return (endMinutes + startMinutes) * (endHours - startHours);
-  }
-
-  @override
-  void initState() {
-    controller = AnimationController(
-      vsync: this,
-      duration: Duration(seconds: 15),
-    )..addListener(() {
-        setState(() {});
-      });
-    controller.repeat(reverse: false);
-    super.initState();
-  }
-
-  @override
-  void dispose() {
-    controller.dispose();
-    super.dispose();
-  }
+  ActiveClassItem(
+      this.id,
+      this.subjectName,
+      this.type,
+      this.room,
+      this.teacherID,
+      this.daysOfWeek,
+      this.startTime,
+      this.endTime,
+      this.subjectColor);
 
   @override
   Widget build(BuildContext context) {
-    final classData = Provider.of<Classes>(context);
-    final subjectData = Provider.of<Subjects>(context);
     final teacherData = Provider.of<Teachers>(context);
 
     DateTime date = DateTime.now();
@@ -102,14 +64,11 @@ class _ActiveClassItemState extends State<ActiveClassItem>
                       children: [
                         Icon(Icons.school),
                         Text(
-                          subjectData
-                              .items[
-                                  int.parse(classData.todayItems[0].subjectID)]
-                              .name,
+                          subjectName,
                           textScaleFactor: 1.6,
                         ),
                         Text(
-                          classData.todayItems[0].type,
+                          type,
                           textScaleFactor: 1.4,
                         ),
                       ],
@@ -120,18 +79,18 @@ class _ActiveClassItemState extends State<ActiveClassItem>
                     children: [
                       Padding(
                         padding: EdgeInsets.only(
-                          right: 30,
+                          right: 20,
                           left: size.width * 0.35,
                         ),
                         child: Row(
-                          mainAxisAlignment: MainAxisAlignment.start,
+                          mainAxisAlignment: MainAxisAlignment.center,
                           children: [
                             Icon(
                               Icons.location_pin,
                               size: 30,
                             ),
                             Text(
-                              classData.todayItems[0].room,
+                              room,
                               textScaleFactor: 1.7,
                             ),
                           ],
@@ -143,19 +102,22 @@ class _ActiveClassItemState extends State<ActiveClassItem>
               ),
               Spacer(),
               Padding(
-                padding: EdgeInsets.only(left: 15),
+                padding: EdgeInsets.only(right: 15),
                 child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Row(
-                      mainAxisAlignment: MainAxisAlignment.start,
+                      mainAxisAlignment: MainAxisAlignment.end,
                       children: [
                         Row(
                           children: [
+                            Icon(Icons.timer),
                             Text(
-                              classData.todayItems[0].startTime,
+                              startTime + ' -- ',
                               textAlign: TextAlign.start,
                             ),
-                            SizedBox(
+
+                            /*  SizedBox(
                               width: size.width * 0.7,
                               child: LinearProgressIndicator(
                                 value: controller.value,
@@ -164,11 +126,12 @@ class _ActiveClassItemState extends State<ActiveClassItem>
                                     Colors.blue),
                                 minHeight: 6,
                               ),
-                            ),
+                            ), */
                             Text(
-                              classData.todayItems[0].endTime,
+                              endTime,
                               textAlign: TextAlign.start,
                             ),
+                            Icon(Icons.timer_off),
                           ],
                         )
                       ],
@@ -178,16 +141,17 @@ class _ActiveClassItemState extends State<ActiveClassItem>
               ),
               Spacer(),
               Padding(
-                padding: EdgeInsets.only(left: 15, bottom: 10),
-                child: Row(children: [
-                  Icon(Icons.people),
-                  Text(
-                    teacherData
-                        .items[int.parse(classData.todayItems[0].teacherID)]
-                        .name,
-                    textScaleFactor: 1.6,
-                  ),
-                ]),
+                padding: EdgeInsets.only(right: 25, bottom: 10),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Icon(Icons.people),
+                    Text(
+                      teacherData.findById(teacherID).name,
+                      textScaleFactor: 1.6,
+                    ),
+                  ],
+                ),
               ),
             ],
           ),

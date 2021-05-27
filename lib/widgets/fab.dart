@@ -1,15 +1,15 @@
 import 'dart:math' as math;
 
 import 'package:flutter/material.dart';
+import 'package:studo/view/classView.dart';
+import 'package:studo/widgets/dash_drawer.dart';
 
 import 'class/newClass.dart';
 
 @immutable
 class ExpandableFab extends StatelessWidget {
   static const _actionTitles = [
-    'Dodaj predavanje',
-    'Upload Photo',
-    'Upload Video'
+    'Pregledaj predavanja',
   ];
 
   const ExpandableFab({Key key}) : super(key: key);
@@ -37,17 +37,18 @@ class ExpandableFab extends StatelessWidget {
       distance: 112.0,
       children: [
         ActionButton(
-          onPressed: () => Navigator.of(context).pushNamed(NewClass.routeName),
-          icon: const Icon(Icons.add),
+          onPressed: () =>
+              Navigator.of(context).pushNamed(DashDrawer.routeName),
+          icon: const Icon(Icons.dashboard_outlined),
         ),
-        ActionButton(
+        /*  ActionButton(
           onPressed: () => _showAction(context, 1),
           icon: const Icon(Icons.insert_photo),
         ),
         ActionButton(
           onPressed: () => _showAction(context, 2),
           icon: const Icon(Icons.videocam),
-        ),
+        ), */
       ],
     );
   }

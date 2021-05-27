@@ -18,29 +18,34 @@ class Subject with ChangeNotifier {
 }
 
 class Subjects with ChangeNotifier {
-  List<Subject> _items = [
-    Subject(
-      id: '0',
-      name: 'Matematika',
-      color: '0000FF',
-      year: '2021',
-    ),
-    Subject(
-      id: '1',
-      name: 'Računovodstvo',
-      color: 'FF0000',
-      year: '2021',
-    ),
-    Subject(
-      id: '2',
-      name: 'PIS',
-      color: '00FF00',
-      year: '2021',
-    ),
-  ];
+  List<Subject> _items = [];
 
   List<Subject> get items {
     return [..._items];
+  }
+
+  Future<void> getItems() async {
+    try {
+      const url =
+          'https://studo-afbaa-default-rtdb.europe-west1.firebasedatabase.app/subjects.json';
+      final response = await http.get(url);
+      final extractedData = json.decode(response.body) as Map<String, dynamic>;
+      final List<Subject> loadedSubjects = [];
+      if (extractedData != null) {
+        extractedData.forEach((subjectId, subjectData) {
+          loadedSubjects.add(Subject(
+            id: subjectData['id'],
+            name: subjectData['name'],
+            color: subjectData['color'],
+            year: subjectData['year'],
+          ));
+        });
+        _items = loadedSubjects;
+      }
+      notifyListeners();
+    } catch (error) {
+      throw (error);
+    }
   }
 
   void deleteSubject(String id) {
@@ -52,20 +57,24 @@ class Subjects with ChangeNotifier {
     const url =
         'https://studo-afbaa-default-rtdb.europe-west1.firebasedatabase.app/subjects.json';
     try {
-      final response = await http.post(url,
-          body: json.encode({
-            'name': subject.name,
-            'color': subject.color,
-            'year': subject.year
-          }));
       final newSubject = Subject(
-        id: DateTime.now().toString(),
+        id: DateTime.now().millisecondsSinceEpoch.toString(),
         name: subject.name,
         color: subject.color,
         year: subject.year,
       );
-      _items.add(newSubject);
-      print(newSubject.id);
+      await http
+          .post(url,
+              body: json.encode({
+                'id': newSubject.id,
+                'name': newSubject.name,
+                'color': newSubject.color,
+                'year': newSubject.year
+              }))
+          .then((response) {
+        _items.add(newSubject);
+      });
+
       notifyListeners();
     } catch (error) {
       throw (error);

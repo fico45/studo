@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:studo/model/teacherModel.dart';
+
 //import 'package:studo/util/dbhelper.dart';
 
 import 'package:studo/widgets/dashboard/active_class_item.dart';
@@ -8,7 +8,6 @@ import 'package:studo/widgets/dashboard/active_class_item.dart';
 import 'package:studo/model/classModel.dart';
 import 'package:studo/model/subjectModel.dart';
 
-import '../fab.dart';
 import 'next_class_item.dart';
 
 class Dashboard extends StatefulWidget {
@@ -29,13 +28,11 @@ class DashboardState extends State {
       setState(() {
         _isLoading = true;
       });
-      Provider.of<Classes>(context).getItems();
+      Provider.of<Classes>(context, listen: false);
 
-      Provider.of<Teachers>(context).fetchTeachers().then((_) {
-        setState(() {
-          _isLoading = false;
-        });
-      });
+      Provider.of<Subjects>(context, listen: false)
+          .getItems()
+          .then((_) => _isLoading = false);
     }
     _isInit = false;
     super.didChangeDependencies();
@@ -51,20 +48,9 @@ class DashboardState extends State {
     final classData = Provider.of<Classes>(context);
     final subjectData = Provider.of<Subjects>(context);
 
-    // DateTime date = DateTime.now();
-    //List<Class> todayItems = Provider.of<Classes>(context).todayItems.toList();
-
-    /* where((cl) {
-      if (date.day == 7) {
-        return json.decode(cl.daysOfWeek)[0];
-      } else {
-        return json.decode(cl.daysOfWeek)[date.day];
-      }
-    }).toList(); */
     Size size = MediaQuery.of(context).size;
 
     return Scaffold(
-      floatingActionButton: ExpandableFab(),
       body: _isLoading
           ? Center(
               child: CircularProgressIndicator(),
@@ -78,7 +64,9 @@ class DashboardState extends State {
                     children: <Widget>[
                       ActiveClassItem(
                           classData.todayItems[0].id,
-                          classData.todayItems[0].subjectID,
+                          subjectData
+                              .findById(classData.todayItems[0].subjectID)
+                              .name,
                           classData.todayItems[0].type,
                           classData.todayItems[0].room,
                           classData.todayItems[0].teacherID,
@@ -94,39 +82,27 @@ class DashboardState extends State {
                 Container(
                   height: size.height * 0.7,
                   child: ListView.builder(
-                      itemCount: classData.todayItems.length,
-                      itemBuilder: (context, i) => Column(
-                            children: [
-                              NextClassItem(
-                                  classData.todayItems[i].id,
-                                  classData.todayItems[i].subjectID,
-                                  classData.todayItems[i].type,
-                                  classData.todayItems[i].room,
-                                  classData.todayItems[i].teacherID,
-                                  classData.todayItems[i].daysOfWeek,
-                                  classData.todayItems[i].startTime,
-                                  classData.todayItems[i].endTime,
-                                  subjectData
-                                      .findById(
-                                          classData.todayItems[i].subjectID)
-                                      .color),
-                              Divider(),
-
-                              /*  NextClassItem(
-                                  classData.items[i].id,
-                                  classData.items[i].subjectID,
-                                  classData.items[i].type,
-                                  classData.items[i].room,
-                                  classData.items[i].teacherID,
-                                  classData.items[i].daysOfWeek,
-                                  classData.items[i].startTime,
-                                  classData.items[i].endTime,
-                                  subjectData
-                                      .findById(classData.items[i].subjectID)
-                                      .color),
-                              Divider(), */
-                            ],
-                          )),
+                      itemCount: classData.upcomingClasses.length,
+                      itemBuilder: (context, i) {
+                        return Column(
+                          children: [
+                            NextClassItem(
+                                classData.upcomingClasses[i].id,
+                                classData.upcomingClasses[i].subjectID,
+                                classData.upcomingClasses[i].type,
+                                classData.upcomingClasses[i].room,
+                                classData.upcomingClasses[i].teacherID,
+                                classData.upcomingClasses[i].daysOfWeek,
+                                classData.upcomingClasses[i].startTime,
+                                classData.upcomingClasses[i].endTime,
+                                subjectData
+                                    .findById(
+                                        classData.upcomingClasses[i].subjectID)
+                                    .color),
+                            Divider(),
+                          ],
+                        );
+                      }),
                 ),
               ],
             ),

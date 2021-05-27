@@ -4,7 +4,6 @@ import 'package:provider/provider.dart';
 import 'package:studo/model/teacherModel.dart';
 import 'package:studo/widgets/teacher/newTeacher.dart';
 import 'package:studo/widgets/teacher/teacher_item.dart';
-import '../widgets/app_drawer.dart';
 
 class TeacherView extends StatefulWidget {
   static const routeName = '/teacher-view';
@@ -60,7 +59,6 @@ class _TeacherViewState extends State<TeacherView> {
           ),
         ],
       ),
-      drawer: AppDrawer(),
       body: _isInit
           ? Center(
               child: CircularProgressIndicator(),
