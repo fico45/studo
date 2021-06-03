@@ -30,8 +30,26 @@ class Teachers with ChangeNotifier {
   }
 
   Future<void> deleteTeacher(String id) async {
-    _items.removeWhere((teacher) => teacher.id == id);
-    notifyListeners();
+    const url =
+        'https://studo-afbaa-default-rtdb.europe-west1.firebasedatabase.app/teachers.json';
+    final response = await http.get(url);
+    final extractedData = json.decode(response.body) as Map<String, dynamic>;
+    try {
+      if (extractedData != null) {
+        extractedData.forEach((teacherId, teacherData) {
+          if (teacherData['id'] == id) {
+            http.delete(Uri.parse(
+                'https://studo-afbaa-default-rtdb.europe-west1.firebasedatabase.app/teachers/' +
+                    teacherId +
+                    '.json'));
+          }
+        });
+      }
+      _items.removeWhere((teacher) => teacher.id == id);
+      notifyListeners();
+    } catch (e) {
+      throw (e);
+    }
   }
 
   Future<void> fetchTeachers() async {
@@ -90,23 +108,38 @@ class Teachers with ChangeNotifier {
   }
 
   Future<void> updateTeacher(String id, Teacher newTeacher) async {
-    final teacherIndex = _items.indexWhere((tchr) => tchr.id == id);
-    if (teacherIndex >= 0) {
-      final url =
-          'https://studo-afbaa-default-rtdb.europe-west1.firebasedatabase.app/teachers/$id.json';
+    const url =
+        'https://studo-afbaa-default-rtdb.europe-west1.firebasedatabase.app/teachers.json';
+    final response = await http.get(url);
+    final extractedData = json.decode(response.body) as Map<String, dynamic>;
 
-      http
-          .patch(url,
+    final teacherIndex = _items.indexWhere((tchr) => tchr.id == id);
+    try {
+      if (extractedData != null) {
+        extractedData.forEach((teacherId, teacherData) {
+          if (teacherData['id'] == id) {
+            http.put(
+              Uri.parse(
+                  'https://studo-afbaa-default-rtdb.europe-west1.firebasedatabase.app/teachers/' +
+                      teacherId +
+                      '.json'),
               body: json.encode({
                 'id': newTeacher.id,
                 'name': newTeacher.name,
-              }))
-          .then((response) {
-        _items[teacherIndex] = newTeacher;
-        notifyListeners();
-      });
-    } else {
-      print('...');
+              }),
+            );
+          }
+        });
+        if (teacherIndex >= 0) {
+          _items[teacherIndex] = newTeacher;
+          notifyListeners();
+        }
+      }
+    } catch (error) {
+      throw (error);
     }
+
+    _items[teacherIndex] = newTeacher;
+    notifyListeners();
   }
 }

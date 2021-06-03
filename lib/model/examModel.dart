@@ -51,7 +51,7 @@ class Exams with ChangeNotifier {
             id: examData['id'],
             subjectID: examData['subjectID'],
             examTimeDate: examData['examTimeDate'],
-            location: examData['examTimeDate'],
+            location: examData['location'],
             description: examData['description'],
           ));
         });
@@ -64,9 +64,27 @@ class Exams with ChangeNotifier {
     }
   }
 
-  void deleteExam(String id) {
-    _items.removeWhere((exam) => exam.id == id);
-    notifyListeners();
+  Future<void> deleteExam(String id) async {
+    const url =
+        'https://studo-afbaa-default-rtdb.europe-west1.firebasedatabase.app/exams.json';
+    final response = await http.get(url);
+    final extractedData = json.decode(response.body) as Map<String, dynamic>;
+    try {
+      if (extractedData != null) {
+        extractedData.forEach((examId, examData) {
+          if (examData['id'] == id) {
+            http.delete(Uri.parse(
+                'https://studo-afbaa-default-rtdb.europe-west1.firebasedatabase.app/exams/' +
+                    examId +
+                    '.json'));
+          }
+        });
+      }
+      _items.removeWhere((exam) => exam.id == id);
+      notifyListeners();
+    } catch (error) {
+      throw (error);
+    }
   }
 
   Future<void> addExam(Exam exam) async {
@@ -75,7 +93,7 @@ class Exams with ChangeNotifier {
 
     try {
       final newExam = Exam(
-        id: DateTime.now().toString(),
+        id: DateTime.now().millisecondsSinceEpoch.toString(),
         subjectID: exam.subjectID,
         examTimeDate: exam.examTimeDate,
         location: exam.location,
@@ -85,10 +103,11 @@ class Exams with ChangeNotifier {
           .post(
         url,
         body: json.encode({
-          'subjectID': exam.subjectID,
-          'examTimeDate': exam.examTimeDate,
-          'location': exam.location,
-          'description': exam.description,
+          'id': newExam.id,
+          'subjectID': newExam.subjectID,
+          'examTimeDate': newExam.examTimeDate,
+          'location': newExam.location,
+          'description': newExam.description,
         }),
       )
           .then((response) {
@@ -104,13 +123,40 @@ class Exams with ChangeNotifier {
     return items.firstWhere((exam) => exam.id == id);
   }
 
-  void updateExam(String id, Exam newExam) {
-    final examIndex = _items.indexWhere((exm) => exm.id == id);
-    if (examIndex >= 0) {
-      _items[examIndex] = newExam;
-      notifyListeners();
-    } else {
-      print('...');
+  Future<void> updateExam(String id, Exam newExam) async {
+    const url =
+        'https://studo-afbaa-default-rtdb.europe-west1.firebasedatabase.app/exams.json';
+    final response = await http.get(url);
+    final extractedData = json.decode(response.body) as Map<String, dynamic>;
+    final examIndex = _items.indexWhere((element) => element.id == id);
+    try {
+      if (extractedData != null) {
+        extractedData.forEach((examId, examData) {
+          if (examData['id'] == id) {
+            http.put(
+              Uri.parse(
+                  'https://studo-afbaa-default-rtdb.europe-west1.firebasedatabase.app/exams/' +
+                      examId +
+                      '.json'),
+              body: json.encode({
+                'id': newExam.id,
+                'subjectID': newExam.subjectID,
+                'examTimeDate': newExam.examTimeDate,
+                'location': newExam.location,
+                'description': newExam.description,
+              }),
+            );
+          }
+        });
+        if (examIndex >= 0) {
+          _items[examIndex] = newExam;
+          notifyListeners();
+        } else {
+          print('...');
+        }
+      }
+    } catch (error) {
+      throw (error);
     }
   }
 }

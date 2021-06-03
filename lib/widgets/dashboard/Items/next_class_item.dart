@@ -45,7 +45,7 @@ class NextClassItem extends StatelessWidget {
       ),
       color: _getColorFromHex(subjectColor),
       child: Column(
-        mainAxisSize: MainAxisSize.min,
+        mainAxisSize: MainAxisSize.max,
         children: <Widget>[
           new ListTile(
               leading: Container(

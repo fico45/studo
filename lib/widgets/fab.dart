@@ -2,6 +2,7 @@ import 'dart:math' as math;
 
 import 'package:flutter/material.dart';
 import 'package:studo/view/classView.dart';
+import 'package:studo/widgets/bouncy_page_route.dart';
 import 'package:studo/widgets/dash_drawer.dart';
 
 import 'class/newClass.dart';
@@ -38,7 +39,7 @@ class ExpandableFab extends StatelessWidget {
       children: [
         ActionButton(
           onPressed: () =>
-              Navigator.of(context).pushNamed(DashDrawer.routeName),
+              Navigator.push(context, BouncyPageRoute(DashDrawer())),
           icon: const Icon(Icons.dashboard_outlined),
         ),
         /*  ActionButton(

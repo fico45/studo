@@ -3,6 +3,7 @@ import 'package:studo/view/examView.dart';
 import 'package:studo/view/teacherView.dart';
 import 'package:studo/view/subjectView.dart';
 import 'package:studo/view/classView.dart';
+import 'package:studo/widgets/bouncy_page_route.dart';
 
 class DashDrawer extends StatelessWidget {
   static const routeName = '/drawer';
@@ -19,7 +20,7 @@ class DashDrawer extends StatelessWidget {
           leading: Icon(Icons.people),
           title: Text('Profesori'),
           onTap: () {
-            Navigator.of(context).pushReplacementNamed(TeacherView.routeName);
+            Navigator.push(context, BouncyPageRoute(TeacherView()));
           },
         ),
         Divider(),
@@ -27,7 +28,7 @@ class DashDrawer extends StatelessWidget {
           leading: Icon(Icons.school),
           title: Text('Kolegiji'),
           onTap: () {
-            Navigator.of(context).pushReplacementNamed(SubjectView.routeName);
+            Navigator.push(context, BouncyPageRoute(SubjectView()));
           },
         ),
         Divider(),
@@ -35,7 +36,7 @@ class DashDrawer extends StatelessWidget {
           leading: Icon(Icons.timelapse),
           title: Text('Predavanja'),
           onTap: () {
-            Navigator.of(context).pushReplacementNamed(ClassView.routeName);
+            Navigator.push(context, BouncyPageRoute(ClassView()));
           },
         ),
         Divider(),
@@ -43,7 +44,7 @@ class DashDrawer extends StatelessWidget {
           leading: Icon(Icons.book),
           title: Text('Ispiti'),
           onTap: () {
-            Navigator.of(context).pushReplacementNamed(ExamView.routeName);
+            Navigator.push(context, BouncyPageRoute(ExamView()));
           },
         ),
         Divider(),

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+import 'package:studo/widgets/bouncy_page_route.dart';
 import 'package:studo/model/examModel.dart';
 import 'package:studo/widgets/exam/newExam.dart';
 import 'package:studo/widgets/exam/exam_item.dart';
@@ -21,7 +22,7 @@ class ExamView extends StatelessWidget {
           IconButton(
             icon: const Icon(Icons.add),
             onPressed: () {
-              Navigator.of(context).pushNamed(NewExam.routeName);
+              Navigator.push(context, BouncyPageRoute(NewExam()));
             },
           ),
         ],

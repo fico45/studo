@@ -95,29 +95,25 @@ class Classes with ChangeNotifier {
   Future<void> getGodayItems() async {
     try {
       DateTime date = DateTime.now();
-      print('Sada je:' + date.hour.toString());
-      print('Kaže: ');
       if (_items != null) {
         _todayItems = _items.where(
           (cl) {
             if (date.weekday == 7 &&
                 json.decode(cl.daysOfWeek)[0] == true &&
-                int.parse(cl.endTime) > date.hour) {
+                int.parse(cl.endTime[0] + cl.endTime[1]) * 60 +
+                        int.parse(cl.endTime[3] + cl.endTime[4]) >
+                    date.hour * 60 + date.minute) {
               return true;
-            } else if /* (json.decode(cl.daysOfWeek)[date.weekday] == true &&
-                DateTime.parse(cl.endTime).isBefore(DateTime.now())) {
+            } else if (json.decode(cl.daysOfWeek)[date.weekday] == true &&
+                int.parse(cl.endTime[0] + cl.endTime[1]) * 60 +
+                        int.parse(cl.endTime[3] + cl.endTime[4]) >
+                    date.hour * 60 + date.minute) {
               return true;
-            } */
-
-                (json.decode(cl.daysOfWeek)[date.weekday] == true) {
-              if (int.parse(cl.endTime[0] + cl.endTime[1]) > date.hour) {
-                return true;
-              }
-              return true;
-            }
-            return false;
+            } else
+              return false;
           },
         ).toList();
+
         _todayItems.sort((a, b) {
           var aTime = a.startTime;
           var bTime = b.startTime;
@@ -131,9 +127,27 @@ class Classes with ChangeNotifier {
     }
   }
 
-  void deleteClass(String id) {
-    _items.removeWhere((cl) => cl.id == id);
-    notifyListeners();
+  Future<void> deleteClass(String id) async {
+    const url =
+        'https://studo-afbaa-default-rtdb.europe-west1.firebasedatabase.app/classes.json';
+    final response = await http.get(url);
+    final extractedData = json.decode(response.body) as Map<String, dynamic>;
+    try {
+      if (extractedData != null) {
+        extractedData.forEach((classId, classData) {
+          if (classData['id'] == id) {
+            http.delete(Uri.parse(
+                'https://studo-afbaa-default-rtdb.europe-west1.firebasedatabase.app/classes/' +
+                    classId +
+                    '.json'));
+          }
+        });
+      }
+      _items.removeWhere((cl) => cl.id == id);
+      notifyListeners();
+    } catch (error) {
+      throw (error);
+    }
   }
 
   Future<void> addClass(Class cl) async {
@@ -150,7 +164,6 @@ class Classes with ChangeNotifier {
         startTime: cl.startTime,
         endTime: cl.endTime,
       );
-
       await http
           .post(
         url,
@@ -178,13 +191,43 @@ class Classes with ChangeNotifier {
     return items.firstWhere((element) => element.id == id);
   }
 
-  void updateClass(String id, Class newClass) {
+  Future<void> updateClass(String id, Class newClass) async {
+    const url =
+        'https://studo-afbaa-default-rtdb.europe-west1.firebasedatabase.app/classes.json';
+    final response = await http.get(url);
+    final extractedData = json.decode(response.body) as Map<String, dynamic>;
     final classIndex = _items.indexWhere((element) => element.id == id);
-    if (classIndex >= 0) {
-      _items[classIndex] = newClass;
-      notifyListeners();
-    } else {
-      print('...');
+    try {
+      if (extractedData != null) {
+        extractedData.forEach((classId, classData) {
+          if (classData['id'] == id) {
+            http.put(
+              Uri.parse(
+                  'https://studo-afbaa-default-rtdb.europe-west1.firebasedatabase.app/classes/' +
+                      classId +
+                      '.json'),
+              body: json.encode({
+                'id': newClass.id,
+                'subjectID': newClass.subjectID,
+                'type': newClass.type,
+                'room': newClass.room,
+                'teacherID': newClass.teacherID,
+                'daysOfWeek': newClass.daysOfWeek,
+                'startTime': newClass.startTime,
+                'endTime': newClass.endTime
+              }),
+            );
+          }
+        });
+        if (classIndex >= 0) {
+          _items[classIndex] = newClass;
+          notifyListeners();
+        } else {
+          print('...');
+        }
+      }
+    } catch (error) {
+      throw (error);
     }
   }
 }

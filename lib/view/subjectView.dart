@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:studo/widgets/bouncy_page_route.dart';
 
 import 'package:studo/widgets/subject/newSubject.dart';
 import 'package:studo/widgets/subject/subject_item.dart';
@@ -42,7 +43,7 @@ class _SubjectViewState extends State<SubjectView> {
           IconButton(
             icon: const Icon(Icons.add),
             onPressed: () {
-              Navigator.of(context).pushNamed(NewSubject.routeName);
+              Navigator.push(context, BouncyPageRoute(NewSubject()));
             },
           ),
         ],

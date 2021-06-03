@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import 'package:studo/model/classModel.dart';
+import 'package:studo/widgets/bouncy_page_route.dart';
 import 'package:studo/widgets/class/newClass.dart';
 import 'package:studo/widgets/class/class_item.dart';
 
@@ -60,7 +61,8 @@ class _ClassViewState extends State<ClassView> {
           IconButton(
             icon: const Icon(Icons.add),
             onPressed: () {
-              Navigator.of(context).pushNamed(NewClass.routeName);
+              //Navigator.of(context).pushNamed(NewClass.routeName);
+              Navigator.push(context, BouncyPageRoute(NewClass()));
             },
           ),
         ],

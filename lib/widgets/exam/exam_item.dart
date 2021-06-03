@@ -35,10 +35,7 @@ class ExamItem extends StatelessWidget {
             IconButton(
               icon: Icon(Icons.delete),
               onPressed: () {
-                Provider.of<Exams>(
-                  context,
-                  listen: false,
-                ).deleteExam(id);
+                Provider.of<Exams>(context, listen: false).deleteExam(id);
               },
               color: Theme.of(context).errorColor,
             ),

@@ -25,7 +25,8 @@ class _NewExamState extends State<NewExam> {
   );
 
   var _initValues = {
-    'subjectID': '',
+    'id': '',
+    'subjectID': null,
     'examTimeDate': '',
     'location': '',
     'description': '',
@@ -48,6 +49,7 @@ class _NewExamState extends State<NewExam> {
           listen: false,
         ).findById(examId);
         _initValues = {
+          'id': _editedExam.id,
           'subjectID': _editedExam.subjectID,
           'examTimeDate': _editedExam.examTimeDate,
           'location': _editedExam.location,
@@ -182,6 +184,7 @@ class _NewExamState extends State<NewExam> {
                       ),
                     ),
                     DropdownButtonFormField(
+                      value: _initValues['subjectID'],
                       hint: const Text("Select subject"),
                       onChanged: (final String newValue) {
                         dropdownValue = newValue;
@@ -204,6 +207,23 @@ class _NewExamState extends State<NewExam> {
                         );
                       },
                     ),
+                    TextFormField(
+                        initialValue: _initValues['description'],
+                        decoration: InputDecoration(
+                          labelText: 'Dodatan opis',
+                        ),
+                        onSaved: (value) {
+                          _editedExam = Exam(
+                            id: _editedExam.id,
+                            subjectID: _editedExam.subjectID,
+                            examTimeDate: _editedExam.examTimeDate,
+                            location: _editedExam.location,
+                            description: value,
+                          );
+                        },
+                        onFieldSubmitted: (_) {
+                          _saveForm();
+                        }),
                   ],
                 ),
               ),
